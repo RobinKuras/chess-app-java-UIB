@@ -15,4 +15,5 @@ public class EmptyTile extends Tile{
     @Override
     public ChessPiece getPiece() {return null;}
 
+
 }
