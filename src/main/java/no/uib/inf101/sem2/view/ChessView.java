@@ -3,7 +3,6 @@ package no.uib.inf101.sem2.view;
 import no.uib.inf101.sem2.ChessAlliance;
 import no.uib.inf101.sem2.model.ChessBoard;
 import no.uib.inf101.sem2.model.Tile;
-import no.uib.inf101.sem2.model.TilePosition;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +15,7 @@ public class ChessView extends JPanel {
     public ChessView(){
         this.setFocusable(true);
         this.setPreferredSize(new Dimension(1000, 850));
+        this.setBackground(Color.BLACK);
 
     }
 
