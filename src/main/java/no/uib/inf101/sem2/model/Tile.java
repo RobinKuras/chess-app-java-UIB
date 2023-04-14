@@ -1,57 +1,58 @@
 package no.uib.inf101.sem2.model;
 
+import no.uib.inf101.sem2.grid.CellPosition;
+import no.uib.inf101.sem2.model.pieces.ChessAlliance;
+import no.uib.inf101.sem2.model.pieces.IChessPiece;
 
-import no.uib.inf101.sem2.ChessAlliance;
-import no.uib.inf101.sem2.pieces.ChessPiece;
-
-public class Tile implements ITile {
-    private final TilePosition coordinate;
-    private ChessAlliance alliance;
-
-    public Tile(TilePosition coordinate){
-        this.coordinate = coordinate;
-        this.alliance = null;
+public class Tile {
+    private final CellPosition posOnGrid;
+    private boolean isOccupied;
+    private IChessPiece piece;
+    private final ChessAlliance color;
+    public Tile(CellPosition pos, boolean isOccupied, IChessPiece piece){
+        this.posOnGrid = pos;
+        this.isOccupied = isOccupied;
+        this.piece = piece;
+        this.color = this.checkAlliance();
     }
 
-    @Override
-    public boolean isTileOccupied() {
-        return false;
+
+    public CellPosition getPosOnGrid(){
+        return this.getPosOnGrid();
+    }
+    public IChessPiece getPiece(){
+        return this.piece;
     }
 
-    @Override
-    public ChessPiece getPiece() {
-        return null;
+    public Tile(CellPosition pos){
+        this.posOnGrid = pos;
+        this.isOccupied = false;
+        this.piece = null;
+        this.color = this.checkAlliance();
     }
 
-    @Override
-    public String toString(){
-        return coordinate.rowIndex()+","+coordinate.colIndex();
+    public void changeOccupiedStatus(boolean newStatus){
+        this.isOccupied = newStatus;
     }
 
-    public TilePosition getCoordinate() {
-        return coordinate;
-    }
-
-    public ChessAlliance getAlliance() {
-        return alliance;
-    }
-
-    public void setAlliance(ChessAlliance color){
-        this.alliance = color;
+    public void setPiece(IChessPiece newPiece){
+        this.piece = newPiece;
+        if(newPiece != null){
+            this.changeOccupiedStatus(true);
+        } else {
+            this.changeOccupiedStatus(false);}
     }
 
     public ChessAlliance checkAlliance(){
-        if(coordinate.rowIndex() % 2 == 0 && coordinate.colIndex() % 2 == 0){
+        if(posOnGrid.row() % 2 == 0 && posOnGrid.col() % 2 == 0){
             return ChessAlliance.WHITE;
-        } else if(coordinate.rowIndex() % 2 == 0 && coordinate.colIndex() %2 != 0){
+        } else if(posOnGrid.row() % 2 == 0 && posOnGrid.col() %2 != 0){
             return ChessAlliance.BLACK;
         }
-        if(getCoordinate().rowIndex() % 2 != 0 && coordinate.colIndex() % 2 == 0) {
+        if(posOnGrid.row() % 2 != 0 && posOnGrid.col() % 2 == 0) {
             return ChessAlliance.BLACK;
         } else {
             return ChessAlliance.WHITE;
         }
     }
 }
-
-
