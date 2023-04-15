@@ -15,7 +15,7 @@ public class ChessView extends JPanel {
 
     public ChessView(ViewableChessModel model) {
         this.setFocusable(true);
-        this.setPreferredSize(new Dimension(1000, 850));
+        this.setPreferredSize(new Dimension(750, 690));
         this.setBackground(Color.BLACK);
         this.model = model;
 

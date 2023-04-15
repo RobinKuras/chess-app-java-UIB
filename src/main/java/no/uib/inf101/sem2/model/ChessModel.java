@@ -86,6 +86,15 @@ public class ChessModel implements ViewableChessModel {
         board.get(new CellPosition(7,4)).setPiece(WKing);
     }
 
+    public void movePiece(IChessPiece piece, Move move){
+        piece.movePiece(move);
+    }
+
+    public boolean isLegalMove(IChessPiece piece,Move move){
+        CellPosition tempPos = new CellPosition(piece.getPos().row()+move.deltaRow(),piece.getPos().col()+ move.deltaCol());
+        return board.positionIsOnGrid(tempPos) && board.getPieceAt(tempPos).getAlliance() != piece.getAlliance();
+    }
+
     @Override
     public GridDimension getDimensions() {
         return this.board;

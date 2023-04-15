@@ -31,16 +31,16 @@ public class Tile {
         this.color = this.checkAlliance();
     }
 
-    public void changeOccupiedStatus(boolean newStatus){
-        this.isOccupied = newStatus;
+    public void changeOccupiedStatus(){
+        this.isOccupied = !this.isOccupied;
     }
 
     public void setPiece(IChessPiece newPiece){
         this.piece = newPiece;
         if(newPiece != null){
-            this.changeOccupiedStatus(true);
+            this.changeOccupiedStatus();
         } else {
-            this.changeOccupiedStatus(false);}
+            this.changeOccupiedStatus();}
     }
 
     public ChessAlliance checkAlliance(){

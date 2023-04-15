@@ -15,6 +15,10 @@ public class ChessBoard extends Grid<Tile> {
         }
     }
 
+    public IChessPiece getPieceAt(CellPosition pos){
+        return this.get(pos).getPiece();
+    }
+
     public String prettyString(){
         String output = "";
 
