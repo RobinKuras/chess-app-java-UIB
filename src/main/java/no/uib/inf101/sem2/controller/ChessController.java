@@ -35,6 +35,7 @@ public class ChessController extends MouseAdapter {
             CellPositionToPixelConverter converter = this.view.getCellPositionToPixelConverter();
             CellPosition pos = converter.getCellPositionOfPoint(mouseCoordinate);
             IChessPiece piece = model.getBoard().getPieceAt(pos);
+            System.out.println(pos);
             /*if(piece != null){
                 this.draggedPiece = piece;
             }

@@ -22,7 +22,7 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
     public void setupBlackPieces(){
         //Sets up all black pawns
         for (int i = 0; i < board.getCols(); i++) {
-            Pawn pawn = new Pawn(new CellPosition(1,i), ChessAlliance.BLACK);
+            Pawn pawn = new Pawn(this.board,new CellPosition(1,i), ChessAlliance.BLACK);
             board.get(new CellPosition(1,i)).setPiece(pawn);
         }
 
@@ -56,7 +56,7 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
     public void setupWhitePieces(){
         //Sets up all white pawns
         for (int i = 0; i < board.getCols(); i++) {
-            Pawn pawn = new Pawn(new CellPosition(6,i), ChessAlliance.WHITE);
+            Pawn pawn = new Pawn(this.board,new CellPosition(6,i), ChessAlliance.WHITE);
             board.get(new CellPosition(6,i)).setPiece(pawn);
         }
 
@@ -92,7 +92,7 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
     }
 
     public boolean isLegalMove(IChessPiece piece,Move move){
-        CellPosition tempPos = new CellPosition(piece.getPos().row()+move.deltaRow(),piece.getPos().col()+ move.deltaCol());
+        CellPosition tempPos = new CellPosition(piece.getPos().row()+move.deltaPos().row(),piece.getPos().col()+ move.deltaPos().col());
         return board.positionIsOnGrid(tempPos) && board.getPieceAt(tempPos).getAlliance() != piece.getAlliance();
     }
 

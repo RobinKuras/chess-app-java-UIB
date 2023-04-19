@@ -21,7 +21,7 @@ public class Rook implements IChessPiece{
         } else {
             this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_Black-Rook.png");
         }
-
+/*
         if(pieceColor == ChessAlliance.BLACK){
             for (int i = 1; i < 8; i++) {
                 legalMoves.add(new Move(i,0));
@@ -33,7 +33,7 @@ public class Rook implements IChessPiece{
                 legalMoves.add(new Move(0,i));
             }
         }
-    }
+  */  }
 
 
     @Override
