@@ -1,6 +1,7 @@
 package no.uib.inf101.sem2.view;
 
 import no.uib.inf101.sem2.grid.GridCell;
+import no.uib.inf101.sem2.grid.GridDimension;
 import no.uib.inf101.sem2.model.ChessBoard;
 import no.uib.inf101.sem2.model.Tile;
 import no.uib.inf101.sem2.model.pieces.ChessAlliance;
@@ -23,11 +24,7 @@ public class ChessView extends JPanel {
 
     public void drawGame(Graphics2D canvas) {
         ChessBoard board = new ChessBoard(8, 8);
-        double width = this.getWidth() - 2 * MARGIN;
-        double height = this.getHeight() - 2 * MARGIN;
-        Rectangle2D gameCanvas = new Rectangle2D.Double(MARGIN, MARGIN, width, height);
-
-        CellPositionToPixelConverter converter = new CellPositionToPixelConverter(gameCanvas, model.getDimensions(), MARGIN);
+        CellPositionToPixelConverter converter = this.getCellPositionToPixelConverter();
         drawCells(canvas, converter, model.getTilesOnBoard());
 
     }
@@ -69,5 +66,13 @@ public class ChessView extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         drawGame(g2);
 
+    }
+
+    public CellPositionToPixelConverter getCellPositionToPixelConverter(){
+        double width = this.getWidth() - 2 * MARGIN;
+        double height = this.getHeight() - 2 * MARGIN;
+        Rectangle2D gameCanvas = new Rectangle2D.Double(MARGIN, MARGIN, width, height);
+        GridDimension gridSize = this.model.getDimensions();
+        return new CellPositionToPixelConverter(gameCanvas,gridSize,MARGIN);
     }
 }

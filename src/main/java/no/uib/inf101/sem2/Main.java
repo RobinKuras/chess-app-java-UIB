@@ -1,5 +1,6 @@
 package no.uib.inf101.sem2;
 
+import no.uib.inf101.sem2.controller.ChessController;
 import no.uib.inf101.sem2.model.ChessBoard;
 import no.uib.inf101.sem2.model.ChessModel;
 import no.uib.inf101.sem2.view.ChessView;
@@ -11,6 +12,7 @@ public class Main {
     ChessBoard board = new ChessBoard(8,8);
     ChessModel model = new ChessModel(board);
     ChessView view = new ChessView(model);
+    new ChessController(model,view);
     System.out.println(board.prettyString());
 
     JFrame frame = new JFrame();

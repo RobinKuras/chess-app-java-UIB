@@ -12,12 +12,14 @@ public class Pawn implements IChessPiece{
     private final ChessAlliance pieceColor;
     private ImageIcon imageIcon;
     private final List<Move> legalMoves = new ArrayList<>();
-    private boolean hasMoved;
+    //Tracks amount of moves, so it can only move 2 tiles if it is its first move
+    //Prob needs second constructor for promotion
+    private int moveCount;
     private List<Move> candidateMoves = new ArrayList<>();
     public Pawn(CellPosition position,ChessAlliance color){
         this.pos = position;
         this.pieceColor = color;
-        this.hasMoved = false;
+        this.moveCount = 0;
 
         if(this.pieceColor == ChessAlliance.WHITE){
             this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_White-Pawn.png");

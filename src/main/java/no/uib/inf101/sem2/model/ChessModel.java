@@ -1,12 +1,13 @@
 package no.uib.inf101.sem2.model;
 
+import no.uib.inf101.sem2.controller.ControlableChessModel;
 import no.uib.inf101.sem2.grid.CellPosition;
 import no.uib.inf101.sem2.grid.GridCell;
 import no.uib.inf101.sem2.grid.GridDimension;
 import no.uib.inf101.sem2.model.pieces.*;
 import no.uib.inf101.sem2.view.ViewableChessModel;
 
-public class ChessModel implements ViewableChessModel {
+public class ChessModel implements ViewableChessModel, ControlableChessModel {
     ChessBoard board;
 
     public ChessModel(ChessBoard board){
@@ -95,6 +96,9 @@ public class ChessModel implements ViewableChessModel {
         return board.positionIsOnGrid(tempPos) && board.getPieceAt(tempPos).getAlliance() != piece.getAlliance();
     }
 
+    public ChessBoard getBoard(){
+        return this.board;
+    }
     @Override
     public GridDimension getDimensions() {
         return this.board;
