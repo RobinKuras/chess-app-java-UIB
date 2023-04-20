@@ -2,6 +2,7 @@ package no.uib.inf101.sem2.model.pieces;
 
 import no.uib.inf101.sem2.grid.CellPosition;
 import no.uib.inf101.sem2.model.ChessBoard;
+import no.uib.inf101.sem2.model.ChessModel;
 import no.uib.inf101.sem2.model.Move;
 
 import javax.swing.*;
@@ -9,19 +10,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pawn implements IChessPiece{
+    private final ChessModel model;
     private final ChessBoard board;
     private CellPosition pos;
     private final ChessAlliance pieceColor;
     private ImageIcon imageIcon;
     private final List<Move> legalMoves = new ArrayList<>();
-    //Tracks amount of moves, so it can only move 2 tiles if it is its first move
     private boolean hasMoved;
     private List<Move> candidateMoves = new ArrayList<>();
-    public Pawn(ChessBoard board, CellPosition position,ChessAlliance color){
+
+    public Pawn(ChessModel model, CellPosition position,ChessAlliance color){
         this.pos = position;
         this.pieceColor = color;
         this.hasMoved = false;
-        this.board = board;
+        this.model = model;
+        this.board = model.getBoard();
 
         if(this.pieceColor == ChessAlliance.WHITE){
             this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_White-Pawn.png");
@@ -30,20 +33,96 @@ public class Pawn implements IChessPiece{
         }
 
         if(pieceColor == ChessAlliance.BLACK){
-            Move firstMove = new Move(new CellPosition(2,0));
-            legalMoves.add(firstMove);
-            legalMoves.add(new Move(new CellPosition(1,0)));
+            Move regularMove = (new Move(new CellPosition(1,0)));
+            legalMoves.add(regularMove);
+            Move pawnJump = new Move(new CellPosition(2,0));
+            legalMoves.add(pawnJump);
+
 
         } else if(pieceColor == ChessAlliance.WHITE){
-            Move firstMove = new Move(new CellPosition(-2,0));
-            legalMoves.add(firstMove);
-            legalMoves.add(new Move(new CellPosition(-1,0)));
+            Move regularMove = (new Move(new CellPosition(-1,0)));
+            legalMoves.add(regularMove);
+            Move pawnJump = new Move(new CellPosition(-2,0));
+            legalMoves.add(pawnJump);
             }
         }
 
     @Override
     public void movePiece(Move move) {
-        this.pos = new CellPosition(this.pos.row()+move.deltaPos().row(),this.pos.col()+move.deltaPos().col());
+        if(candidateMoves.contains(move)){
+            this.pos = new CellPosition(this.pos.row()+move.deltaPos().row(),this.pos.col()+move.deltaPos().col());
+        }
+    }
+
+    public void updateCandidateMoves(){
+       this.candidateMoves.clear();
+
+       if(pieceColor == ChessAlliance.WHITE){
+           updateWhiteMoves();
+       } else {
+           updateBlackMoves();
+       }
+    }
+
+    private void updateBlackMoves() {
+        //Checks if pawn has moved, and can do pawn jump (2 tiles)
+        if(pos.row() == 1 && !board.isOccupied(new CellPosition(pos.row()+2, pos.col())) && !board.isOccupied(new CellPosition(pos.row()+1, pos.col()))){
+            candidateMoves.add(new Move(new CellPosition(2,0)));
+        }
+
+        //Checks if pawn can do a regular move (1 tile)
+        if(!board.isOccupied(new CellPosition(pos.row()+1, pos.col()))){
+            candidateMoves.add(new Move(new CellPosition(1,0)));
+        }
+
+        //Checks if diagonal move to the right is legal
+        if(pos.col() != 7){
+            if(board.isOccupied(new CellPosition(pos.row()+1,pos.col()+1))) {
+                if (board.get(new CellPosition(pos.row()+1, pos.col()+1)).getPiece().getAlliance() == ChessAlliance.WHITE) {
+                    candidateMoves.add(new Move(new CellPosition(1, 1)));
+                }
+            }
+        }
+
+        //Checks if diagonal move to the left is legal
+        if(pos.col() != 0){
+            if(board.isOccupied(new CellPosition(pos.row()+1,pos.col()-1))) {
+                if (board.get(new CellPosition(pos.row()+1, pos.col()-1)).getPiece().getAlliance() == ChessAlliance.WHITE) {
+                    candidateMoves.add(new Move(new CellPosition(1, -1)));
+                }
+            }
+        }
+    }
+
+
+    private void updateWhiteMoves() {
+        //Checks if pawn has moved, and can do pawn jump (2 tiles)
+        if(pos.row() == 6 && !board.isOccupied(new CellPosition(pos.row()-2, pos.col())) && !board.isOccupied(new CellPosition(pos.row()-1, pos.col()))){
+            candidateMoves.add(new Move(new CellPosition(-2,0)));
+        }
+
+        //Checks if pawn can do a regular move (1 tile)
+        if(!board.isOccupied(new CellPosition(pos.row()-1, pos.col()))){
+            candidateMoves.add(new Move(new CellPosition(-1,0)));
+        }
+
+        //Checks if diagonal move to the right is legal
+        if(pos.col() != 7){
+            if(board.isOccupied(new CellPosition(pos.row()-1,pos.col()+1))) {
+                if (board.get(new CellPosition(pos.row() - 1, pos.col() + 1)).getPiece().getAlliance() == ChessAlliance.BLACK) {
+                    candidateMoves.add(new Move(new CellPosition(-1, 1)));
+                }
+            }
+        }
+
+        //Checks if diagonal move to the left is legal
+        if(pos.col() != 0){
+            if(board.isOccupied(new CellPosition(pos.row()-1,pos.col()-1))) {
+                if (board.get(new CellPosition(pos.row() - 1, pos.col() - 1)).getPiece().getAlliance() == ChessAlliance.BLACK) {
+                    candidateMoves.add(new Move(new CellPosition(-1, -1)));
+                }
+            }
+        }
     }
 
     @Override
@@ -59,5 +138,15 @@ public class Pawn implements IChessPiece{
     @Override
     public CellPosition getPos() {
         return pos;
+    }
+
+    @Override
+    public List<Move> getCandidateMoves() {
+        return candidateMoves;
+    }
+
+    @Override
+    public List<Move> getLegalMoves() {
+        return legalMoves;
     }
 }

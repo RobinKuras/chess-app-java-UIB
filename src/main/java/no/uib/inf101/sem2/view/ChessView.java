@@ -1,5 +1,6 @@
 package no.uib.inf101.sem2.view;
 
+import no.uib.inf101.sem2.grid.CellPosition;
 import no.uib.inf101.sem2.grid.GridCell;
 import no.uib.inf101.sem2.grid.GridDimension;
 import no.uib.inf101.sem2.model.ChessBoard;
@@ -8,10 +9,14 @@ import no.uib.inf101.sem2.model.pieces.ChessAlliance;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 public class ChessView extends JPanel {
     ViewableChessModel model;
+    private CellPosition selectedTile;
     private static final double MARGIN = 2;
 
     public ChessView(ViewableChessModel model) {
@@ -19,6 +24,17 @@ public class ChessView extends JPanel {
         this.setPreferredSize(new Dimension(750, 690));
         this.setBackground(Color.BLACK);
         this.model = model;
+
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+        /*
+                Point2D mouseCoordinate = e.getPoint();
+                CellPositionToPixelConverter converter = getCellPositionToPixelConverter();
+                selectedTile = converter.getCellPositionOfPoint(mouseCoordinate);
+           */     repaint();
+            }
+        });
 
     }
 
@@ -55,9 +71,7 @@ public class ChessView extends JPanel {
                     canvas.drawImage(image, (int) imageX, (int) imageY, (int) imageWidth, (int) imageHeight, null);
                 }
             }
-
         }
-
     }
 
     @Override

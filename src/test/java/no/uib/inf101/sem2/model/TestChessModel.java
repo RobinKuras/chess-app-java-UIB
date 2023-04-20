@@ -7,4 +7,11 @@ public class TestChessModel {
     public void isLegalMoveTest(){
 
     }
+
+    @Test
+    public void candidateMovesUpdatesCorrectlyIfBlocked(){
+        ChessBoard board = new ChessBoard(8,8);
+        ChessModel model = new ChessModel(board);
+
+    }
 }

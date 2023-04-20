@@ -2,6 +2,7 @@ package no.uib.inf101.sem2.controller;
 
 import no.uib.inf101.sem2.grid.CellPosition;
 import no.uib.inf101.sem2.model.ChessModel;
+import no.uib.inf101.sem2.model.Move;
 import no.uib.inf101.sem2.model.pieces.IChessPiece;
 import no.uib.inf101.sem2.view.CellPositionToPixelConverter;
 import no.uib.inf101.sem2.view.ChessView;
@@ -15,7 +16,7 @@ public class ChessController extends MouseAdapter {
 
         private ChessModel model;
         private ChessView view;
-        private IChessPiece draggedPiece;
+        private IChessPiece selectedPiece;
 
         /**
          * Construct a controller recating to key presses.
@@ -27,21 +28,41 @@ public class ChessController extends MouseAdapter {
             this.model = model;
             this.view = view;
             this.view.addMouseListener(this);
+            this.selectedPiece = null;
         }
 
         @Override
         public void mousePressed(MouseEvent event) {
-            Point2D mouseCoordinate = event.getPoint();
-            CellPositionToPixelConverter converter = this.view.getCellPositionToPixelConverter();
-            CellPosition pos = converter.getCellPositionOfPoint(mouseCoordinate);
-            IChessPiece piece = model.getBoard().getPieceAt(pos);
-            System.out.println(pos);
-            /*if(piece != null){
-                this.draggedPiece = piece;
+            if(selectedPiece == null){
+                Point2D mouseCoordinate = event.getPoint();
+                CellPositionToPixelConverter converter = this.view.getCellPositionToPixelConverter();
+                CellPosition pos = converter.getCellPositionOfPoint(mouseCoordinate);
+                IChessPiece piece = model.getBoard().getPieceAt(pos);
+                if(piece != null){
+                    piece.updateCandidateMoves();
+                    selectedPiece = piece;
+                    System.out.println(piece.getCandidateMoves());
+                } else System.out.println("No Piece here!");
+
+            } else {
+                Point2D mouseCoordinate = event.getPoint();
+                CellPositionToPixelConverter converter = this.view.getCellPositionToPixelConverter();
+                CellPosition newPos = converter.getCellPositionOfPoint(mouseCoordinate);
+                CellPosition oldPos = selectedPiece.getPos();
+
+                int deltaRow = newPos.row() - oldPos.row();
+                int deltaCol = newPos.col() - oldPos.col();
+                Move move = new Move(new CellPosition(deltaRow, deltaCol));
+
+                if(model.isLegalMove(selectedPiece,move)){
+                    selectedPiece.movePiece(move);
+                    model.getBoard().get(newPos).setPiece(selectedPiece);
+                    model.getBoard().get(oldPos).setPiece(null);
+                    selectedPiece = null;
+                    System.out.println("Piece at new pos: "+model.getBoard().get(newPos).getPiece());
+                    System.out.println("Piece at old pos: "+model.getBoard().get(oldPos).getPiece());
+
+                } selectedPiece = null;
             }
-            this.view.repaint();
-        }*/
-
         }
-
 }

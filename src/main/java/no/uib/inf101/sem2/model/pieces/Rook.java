@@ -55,4 +55,19 @@ public class Rook implements IChessPiece{
     public CellPosition getPos() {
         return pos;
     }
+
+    @Override
+    public List<Move> getCandidateMoves() {
+        return null;
+    }
+
+    @Override
+    public List<Move> getLegalMoves() {
+        return null;
+    }
+
+    @Override
+    public void updateCandidateMoves() {
+
+    }
 }

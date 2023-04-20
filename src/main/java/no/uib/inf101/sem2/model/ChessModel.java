@@ -18,73 +18,91 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
     public void initiateBoard(){
         setupBlackPieces();
         setupWhitePieces();
+        setupTestPieces();
     }
+
+    private void setupTestPieces() {
+        // TEST REMOVE AFTER USE ****************************************************
+        King testKing = new King(new CellPosition(3, 0), ChessAlliance.BLACK);
+        board.get(testKing.getPos()).setPiece(testKing);
+
+        //TEST REMOVE AFTER USE ****************************************************
+        King testKing2 = new King(new CellPosition(4,0),ChessAlliance.WHITE);
+        board.get(testKing2.getPos()).setPiece(testKing2);
+
+        Pawn testWhitePawn = new Pawn(this,new CellPosition(2,1),ChessAlliance.WHITE);
+        board.get(testWhitePawn.getPos()).setPiece(testWhitePawn);
+
+        Pawn testBlackPawn = new Pawn(this,new CellPosition(5,6),ChessAlliance.BLACK);
+        board.get(testBlackPawn.getPos()).setPiece(testBlackPawn);
+    }
+
     public void setupBlackPieces(){
         //Sets up all black pawns
         for (int i = 0; i < board.getCols(); i++) {
-            Pawn pawn = new Pawn(this.board,new CellPosition(1,i), ChessAlliance.BLACK);
-            board.get(new CellPosition(1,i)).setPiece(pawn);
+            Pawn pawn = new Pawn(this,new CellPosition(1,i), ChessAlliance.BLACK);
+            board.get(pawn.getPos()).setPiece(pawn);
         }
 
         //sets up black rooks
-        Rook BRook1 = new Rook(new CellPosition(0,0),ChessAlliance.BLACK);
-        Rook BRook2 = new Rook(new CellPosition(0,7),ChessAlliance.BLACK);
-        board.get(new CellPosition(0,0)).setPiece(BRook1);
-        board.get(new CellPosition(0,7)).setPiece(BRook2);
+        Rook bRook1 = new Rook(new CellPosition(0, 0), ChessAlliance.BLACK);
+        Rook bRook2 = new Rook(new CellPosition(0, 7), ChessAlliance.BLACK);
+        board.get(bRook1.getPos()).setPiece(bRook1);
+        board.get(bRook2.getPos()).setPiece(bRook2);
+
 
         //sets up black knights
-        Knight BKnight1 = new Knight(new CellPosition(0,1),ChessAlliance.BLACK);
-        Knight BKnight2 = new Knight(new CellPosition(0,6),ChessAlliance.BLACK);
-        board.get(new CellPosition(0,1)).setPiece(BKnight1);
-        board.get(new CellPosition(0,6)).setPiece(BKnight2);
+        Knight bKnight1 = new Knight(new CellPosition(0, 1), ChessAlliance.BLACK);
+        Knight bKnight2 = new Knight(new CellPosition(0, 6), ChessAlliance.BLACK);
+        board.get(bKnight1.getPos()).setPiece(bKnight1);
+        board.get(bKnight2.getPos()).setPiece(bKnight2);
 
         //Sets up black bishops
-        Bishop BBishop1 = new Bishop(new CellPosition(0,2),ChessAlliance.BLACK);
-        Bishop BBishop2 = new Bishop(new CellPosition(0,5),ChessAlliance.BLACK);
-        board.get(new CellPosition(0,2)).setPiece(BBishop1);
-        board.get(new CellPosition(0,5)).setPiece(BBishop2);
+        Bishop bBishop1 = new Bishop(new CellPosition(0, 2), ChessAlliance.BLACK);
+        Bishop bBishop2 = new Bishop(new CellPosition(0, 5), ChessAlliance.BLACK);
+        board.get(bBishop1.getPos()).setPiece(bBishop1);
+        board.get(bBishop2.getPos()).setPiece(bBishop2);
 
-        //Sets up black queen
-        Queen BQueen = new Queen(new CellPosition(0,3),ChessAlliance.BLACK);
-        board.get(new CellPosition(0,3)).setPiece(BQueen);
+        // Sets up black queen
+        Queen bQueen = new Queen(new CellPosition(0, 4), ChessAlliance.BLACK);
+        board.get(bQueen.getPos()).setPiece(bQueen);
 
-        //Sets up black king
-        King BKing = new King(new CellPosition(0,4),ChessAlliance.BLACK);
-        board.get(new CellPosition(0,4)).setPiece(BKing);
-
+        // Sets up black king
+        King bKing = new King(new CellPosition(0, 3), ChessAlliance.BLACK);
+        board.get(bKing.getPos()).setPiece(bKing);
     }
     public void setupWhitePieces(){
         //Sets up all white pawns
         for (int i = 0; i < board.getCols(); i++) {
-            Pawn pawn = new Pawn(this.board,new CellPosition(6,i), ChessAlliance.WHITE);
-            board.get(new CellPosition(6,i)).setPiece(pawn);
+            Pawn pawn = new Pawn(this,new CellPosition(6,i), ChessAlliance.WHITE);
+            board.get(pawn.getPos()).setPiece(pawn);
         }
 
         //sets up white rooks
-        Rook WRook1 = new Rook(new CellPosition(7,0),ChessAlliance.WHITE);
-        Rook WRook2 = new Rook(new CellPosition(7,7),ChessAlliance.WHITE);
-        board.get(new CellPosition(7,0)).setPiece(WRook1);
-        board.get(new CellPosition(7,7)).setPiece(WRook2);
+        Rook wRook1 = new Rook(new CellPosition(7,0),ChessAlliance.WHITE);
+        Rook wRook2 = new Rook(new CellPosition(7,7),ChessAlliance.WHITE);
+        board.get(wRook1.getPos()).setPiece(wRook1);
+        board.get(wRook2.getPos()).setPiece(wRook2);
 
         //sets up white knights
-        Knight WKnight1 = new Knight(new CellPosition(7,1),ChessAlliance.WHITE);
-        Knight WKnight2 = new Knight(new CellPosition(7,6),ChessAlliance.WHITE);
-        board.get(new CellPosition(7,1)).setPiece(WKnight1);
-        board.get(new CellPosition(7,6)).setPiece(WKnight2);
+        Knight wKnight1 = new Knight(new CellPosition(7,1),ChessAlliance.WHITE);
+        Knight wKnight2 = new Knight(new CellPosition(7,6),ChessAlliance.WHITE);
+        board.get(wKnight1.getPos()).setPiece(wKnight1);
+        board.get(wKnight2.getPos()).setPiece(wKnight2);
 
         //Sets up white bishops
-        Bishop WBishop1 = new Bishop(new CellPosition(7,2),ChessAlliance.WHITE);
-        Bishop WBishop2 = new Bishop(new CellPosition(7,5),ChessAlliance.WHITE);
-        board.get(new CellPosition(7,2)).setPiece(WBishop1);
-        board.get(new CellPosition(7,5)).setPiece(WBishop2);
+        Bishop wBishop1 = new Bishop(new CellPosition(7,2),ChessAlliance.WHITE);
+        Bishop wBishop2 = new Bishop(new CellPosition(7,5),ChessAlliance.WHITE);
+        board.get(wBishop1.getPos()).setPiece(wBishop1);
+        board.get(wBishop2.getPos()).setPiece(wBishop2);
 
         //Sets up white queen
-        Queen WQueen = new Queen(new CellPosition(7,3),ChessAlliance.WHITE);
-        board.get(new CellPosition(7,3)).setPiece(WQueen);
+        Queen wQueen = new Queen(new CellPosition(7,4),ChessAlliance.WHITE);
+        board.get(wQueen.getPos()).setPiece(wQueen);
 
-        //Sets up black king
-        King WKing = new King(new CellPosition(7,4),ChessAlliance.WHITE);
-        board.get(new CellPosition(7,4)).setPiece(WKing);
+        //Sets up white king
+        King wKing = new King(new CellPosition(7,3),ChessAlliance.WHITE);
+        board.get(wKing.getPos()).setPiece(wKing);
     }
 
     public void movePiece(IChessPiece piece, Move move){
@@ -93,7 +111,8 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
 
     public boolean isLegalMove(IChessPiece piece,Move move){
         CellPosition tempPos = new CellPosition(piece.getPos().row()+move.deltaPos().row(),piece.getPos().col()+ move.deltaPos().col());
-        return board.positionIsOnGrid(tempPos) && board.getPieceAt(tempPos).getAlliance() != piece.getAlliance();
+        IChessPiece tempPiece = board.getPieceAt(tempPos);
+        return (board.positionIsOnGrid(tempPos)) && (piece.getCandidateMoves().contains(move));
     }
 
     public ChessBoard getBoard(){

@@ -19,6 +19,10 @@ public class ChessBoard extends Grid<Tile> {
         return this.get(pos).getPiece();
     }
 
+    public boolean isOccupied(CellPosition pos){
+        return this.get(pos).getIsOccupied();
+    }
+
     public String prettyString(){
         String output = "";
 

@@ -4,6 +4,7 @@ import no.uib.inf101.sem2.grid.CellPosition;
 import no.uib.inf101.sem2.model.Move;
 
 import javax.swing.*;
+import java.util.List;
 
 public class Bishop implements IChessPiece{
     private CellPosition pos;
@@ -38,5 +39,20 @@ public class Bishop implements IChessPiece{
     @Override
     public CellPosition getPos() {
         return pos;
+    }
+
+    @Override
+    public List<Move> getCandidateMoves() {
+        return null;
+    }
+
+    @Override
+    public List<Move> getLegalMoves() {
+        return null;
+    }
+
+    @Override
+    public void updateCandidateMoves() {
+
     }
 }

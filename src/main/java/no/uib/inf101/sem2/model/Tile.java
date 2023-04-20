@@ -55,4 +55,8 @@ public class Tile {
             return ChessAlliance.WHITE;
         }
     }
+
+    public boolean getIsOccupied() {
+        return isOccupied;
+    }
 }
