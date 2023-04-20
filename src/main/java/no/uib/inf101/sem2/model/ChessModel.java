@@ -23,11 +23,11 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
 
     private void setupTestPieces() {
         // TEST REMOVE AFTER USE ****************************************************
-        King testKing = new King(new CellPosition(3, 0), ChessAlliance.BLACK);
+        King testKing = new King(this,new CellPosition(3, 0), ChessAlliance.BLACK);
         board.get(testKing.getPos()).setPiece(testKing);
 
         //TEST REMOVE AFTER USE ****************************************************
-        King testKing2 = new King(new CellPosition(4,0),ChessAlliance.WHITE);
+        King testKing2 = new King(this,new CellPosition(4,0),ChessAlliance.WHITE);
         board.get(testKing2.getPos()).setPiece(testKing2);
 
         Pawn testWhitePawn = new Pawn(this,new CellPosition(2,1),ChessAlliance.WHITE);
@@ -71,7 +71,7 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
         board.get(bQueen.getPos()).setPiece(bQueen);
 
         // Sets up black king
-        King bKing = new King(new CellPosition(0, 3), ChessAlliance.BLACK);
+        King bKing = new King(this,new CellPosition(0, 3), ChessAlliance.BLACK);
         board.get(bKing.getPos()).setPiece(bKing);
     }
     public void setupWhitePieces(){
@@ -104,7 +104,7 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
         board.get(wQueen.getPos()).setPiece(wQueen);
 
         //Sets up white king
-        King wKing = new King(new CellPosition(7,3),ChessAlliance.WHITE);
+        King wKing = new King(this,new CellPosition(7,3),ChessAlliance.WHITE);
         board.get(wKing.getPos()).setPiece(wKing);
     }
 
