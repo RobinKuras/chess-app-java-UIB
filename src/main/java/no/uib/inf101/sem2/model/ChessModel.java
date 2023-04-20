@@ -61,8 +61,8 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
         board.get(bKnight2.getPos()).setPiece(bKnight2);
 
         //Sets up black bishops
-        Bishop bBishop1 = new Bishop(new CellPosition(0, 2), ChessAlliance.BLACK);
-        Bishop bBishop2 = new Bishop(new CellPosition(0, 5), ChessAlliance.BLACK);
+        Bishop bBishop1 = new Bishop(this,new CellPosition(0, 2), ChessAlliance.BLACK);
+        Bishop bBishop2 = new Bishop(this,new CellPosition(0, 5), ChessAlliance.BLACK);
         board.get(bBishop1.getPos()).setPiece(bBishop1);
         board.get(bBishop2.getPos()).setPiece(bBishop2);
 
@@ -94,8 +94,8 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
         board.get(wKnight2.getPos()).setPiece(wKnight2);
 
         //Sets up white bishops
-        Bishop wBishop1 = new Bishop(new CellPosition(7,2),ChessAlliance.WHITE);
-        Bishop wBishop2 = new Bishop(new CellPosition(7,5),ChessAlliance.WHITE);
+        Bishop wBishop1 = new Bishop(this,new CellPosition(7,2),ChessAlliance.WHITE);
+        Bishop wBishop2 = new Bishop(this,new CellPosition(7,5),ChessAlliance.WHITE);
         board.get(wBishop1.getPos()).setPiece(wBishop1);
         board.get(wBishop2.getPos()).setPiece(wBishop2);
 

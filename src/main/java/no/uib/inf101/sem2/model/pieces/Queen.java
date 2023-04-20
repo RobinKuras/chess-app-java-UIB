@@ -86,7 +86,7 @@ public class Queen implements IChessPiece{
             }
         }
 
-        //sets up candidate moves of the rook, upwards toward black start
+        //sets up candidate moves of the queen, upwards toward black start
         for(int i = row-1; i >= 0; i--){
             CellPosition nextPos = new CellPosition(i,col);
             if(board.isOccupied(nextPos)){
@@ -96,7 +96,7 @@ public class Queen implements IChessPiece{
             } else candidateMoves.add(new Move(new CellPosition(nextPos.row()-row, nextPos.col()-col)));
         }
 
-        //sets up candidate moves of the rook, backwards toward white start
+        //sets up candidate moves of the queen, backwards toward white start
         for(int i = row+1; i < board.getRows(); i++){
             CellPosition nextPos = new CellPosition(i,col);
             if(board.isOccupied(nextPos)){
