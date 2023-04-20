@@ -67,7 +67,7 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
         board.get(bBishop2.getPos()).setPiece(bBishop2);
 
         // Sets up black queen
-        Queen bQueen = new Queen(new CellPosition(0, 4), ChessAlliance.BLACK);
+        Queen bQueen = new Queen(this,new CellPosition(0, 4), ChessAlliance.BLACK);
         board.get(bQueen.getPos()).setPiece(bQueen);
 
         // Sets up black king
@@ -100,7 +100,7 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
         board.get(wBishop2.getPos()).setPiece(wBishop2);
 
         //Sets up white queen
-        Queen wQueen = new Queen(new CellPosition(7,4),ChessAlliance.WHITE);
+        Queen wQueen = new Queen(this,new CellPosition(7,4),ChessAlliance.WHITE);
         board.get(wQueen.getPos()).setPiece(wQueen);
 
         //Sets up white king
