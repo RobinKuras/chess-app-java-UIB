@@ -35,6 +35,9 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
 
         Pawn testBlackPawn = new Pawn(this,new CellPosition(5,6),ChessAlliance.BLACK);
         board.get(testBlackPawn.getPos()).setPiece(testBlackPawn);
+
+        Rook testRook = new Rook(this,new CellPosition(4,4),ChessAlliance.WHITE);
+        board.get(testRook.getPos()).setPiece(testRook);
     }
 
     public void setupBlackPieces(){
@@ -45,8 +48,8 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
         }
 
         //sets up black rooks
-        Rook bRook1 = new Rook(new CellPosition(0, 0), ChessAlliance.BLACK);
-        Rook bRook2 = new Rook(new CellPosition(0, 7), ChessAlliance.BLACK);
+        Rook bRook1 = new Rook(this,new CellPosition(0, 0), ChessAlliance.BLACK);
+        Rook bRook2 = new Rook(this,new CellPosition(0, 7), ChessAlliance.BLACK);
         board.get(bRook1.getPos()).setPiece(bRook1);
         board.get(bRook2.getPos()).setPiece(bRook2);
 
@@ -79,8 +82,8 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
         }
 
         //sets up white rooks
-        Rook wRook1 = new Rook(new CellPosition(7,0),ChessAlliance.WHITE);
-        Rook wRook2 = new Rook(new CellPosition(7,7),ChessAlliance.WHITE);
+        Rook wRook1 = new Rook(this,new CellPosition(7,0),ChessAlliance.WHITE);
+        Rook wRook2 = new Rook(this,new CellPosition(7,7),ChessAlliance.WHITE);
         board.get(wRook1.getPos()).setPiece(wRook1);
         board.get(wRook2.getPos()).setPiece(wRook2);
 
@@ -103,10 +106,6 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
         //Sets up white king
         King wKing = new King(new CellPosition(7,3),ChessAlliance.WHITE);
         board.get(wKing.getPos()).setPiece(wKing);
-    }
-
-    public void movePiece(IChessPiece piece, Move move){
-        piece.movePiece(move);
     }
 
     public boolean isLegalMove(IChessPiece piece,Move move){

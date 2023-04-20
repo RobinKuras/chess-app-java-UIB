@@ -10,42 +10,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pawn implements IChessPiece{
-    private final ChessModel model;
     private final ChessBoard board;
     private CellPosition pos;
     private final ChessAlliance pieceColor;
     private ImageIcon imageIcon;
-    private final List<Move> legalMoves = new ArrayList<>();
-    private boolean hasMoved;
     private List<Move> candidateMoves = new ArrayList<>();
 
     public Pawn(ChessModel model, CellPosition position,ChessAlliance color){
         this.pos = position;
         this.pieceColor = color;
-        this.hasMoved = false;
-        this.model = model;
         this.board = model.getBoard();
 
         if(this.pieceColor == ChessAlliance.WHITE){
             this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_White-Pawn.png");
-        } else {
-            this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_Black-Pawn.png");
-        }
-
-        if(pieceColor == ChessAlliance.BLACK){
-            Move regularMove = (new Move(new CellPosition(1,0)));
-            legalMoves.add(regularMove);
-            Move pawnJump = new Move(new CellPosition(2,0));
-            legalMoves.add(pawnJump);
-
-
-        } else if(pieceColor == ChessAlliance.WHITE){
-            Move regularMove = (new Move(new CellPosition(-1,0)));
-            legalMoves.add(regularMove);
-            Move pawnJump = new Move(new CellPosition(-2,0));
-            legalMoves.add(pawnJump);
-            }
-        }
+        } else this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_Black-Pawn.png");
+    }
 
     @Override
     public void movePiece(Move move) {
@@ -54,6 +33,7 @@ public class Pawn implements IChessPiece{
         }
     }
 
+    @Override
     public void updateCandidateMoves(){
        this.candidateMoves.clear();
 
@@ -65,6 +45,7 @@ public class Pawn implements IChessPiece{
     }
 
     private void updateBlackMoves() {
+
         //Checks if pawn has moved, and can do pawn jump (2 tiles)
         if(pos.row() == 1 && !board.isOccupied(new CellPosition(pos.row()+2, pos.col())) && !board.isOccupied(new CellPosition(pos.row()+1, pos.col()))){
             candidateMoves.add(new Move(new CellPosition(2,0)));
@@ -143,10 +124,5 @@ public class Pawn implements IChessPiece{
     @Override
     public List<Move> getCandidateMoves() {
         return candidateMoves;
-    }
-
-    @Override
-    public List<Move> getLegalMoves() {
-        return legalMoves;
     }
 }

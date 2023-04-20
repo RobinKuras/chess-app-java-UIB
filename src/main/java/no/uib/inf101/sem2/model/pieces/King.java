@@ -48,11 +48,6 @@ public class King implements IChessPiece{
     }
 
     @Override
-    public List<Move> getLegalMoves() {
-        return null;
-    }
-
-    @Override
     public void updateCandidateMoves() {
 
     }

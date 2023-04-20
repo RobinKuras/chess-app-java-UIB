@@ -62,7 +62,10 @@ public class ChessController extends MouseAdapter {
                     System.out.println("Piece at new pos: "+model.getBoard().get(newPos).getPiece());
                     System.out.println("Piece at old pos: "+model.getBoard().get(oldPos).getPiece());
 
-                } selectedPiece = null;
+                } else{
+                    System.out.println("Illegal move");
+                    selectedPiece = null;
+                }
             }
         }
 }

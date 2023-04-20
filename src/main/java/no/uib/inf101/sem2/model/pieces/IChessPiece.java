@@ -12,6 +12,5 @@ public interface IChessPiece {
     ChessAlliance getAlliance();
     CellPosition getPos();
     List<Move> getCandidateMoves();
-    List<Move> getLegalMoves();
     void updateCandidateMoves();
 }
