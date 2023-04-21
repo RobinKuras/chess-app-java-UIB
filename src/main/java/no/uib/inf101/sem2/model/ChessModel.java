@@ -55,8 +55,8 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
 
 
         //sets up black knights
-        Knight bKnight1 = new Knight(new CellPosition(0, 1), ChessAlliance.BLACK);
-        Knight bKnight2 = new Knight(new CellPosition(0, 6), ChessAlliance.BLACK);
+        Knight bKnight1 = new Knight(this,new CellPosition(0, 1), ChessAlliance.BLACK);
+        Knight bKnight2 = new Knight(this,new CellPosition(0, 6), ChessAlliance.BLACK);
         board.get(bKnight1.getPos()).setPiece(bKnight1);
         board.get(bKnight2.getPos()).setPiece(bKnight2);
 
@@ -88,8 +88,8 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
         board.get(wRook2.getPos()).setPiece(wRook2);
 
         //sets up white knights
-        Knight wKnight1 = new Knight(new CellPosition(7,1),ChessAlliance.WHITE);
-        Knight wKnight2 = new Knight(new CellPosition(7,6),ChessAlliance.WHITE);
+        Knight wKnight1 = new Knight(this,new CellPosition(7,1),ChessAlliance.WHITE);
+        Knight wKnight2 = new Knight(this,new CellPosition(7,6),ChessAlliance.WHITE);
         board.get(wKnight1.getPos()).setPiece(wKnight1);
         board.get(wKnight2.getPos()).setPiece(wKnight2);
 
