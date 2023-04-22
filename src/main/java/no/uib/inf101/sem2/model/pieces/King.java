@@ -10,17 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class King implements IChessPiece{
+    private ChessModel model;
     private ChessBoard board;
     private CellPosition pos;
-    private boolean underAttack;
     private final ChessAlliance pieceColor;
     private ImageIcon imageIcon;
     private List<Move> candidateMoves = new ArrayList<>();
     public King(ChessModel model, CellPosition position, ChessAlliance color){
         this.pos = position;
         this.pieceColor = color;
+        this.model = model;
         this.board = model.getBoard();
-        this.underAttack = false;
 
         if(this.pieceColor == ChessAlliance.WHITE){
             this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_White-King.png");
@@ -33,6 +33,11 @@ public class King implements IChessPiece{
         if(candidateMoves.contains(move)){
             this.pos = new CellPosition(this.pos.row()+move.deltaPos().row(),this.pos.col()+move.deltaPos().col());
         }
+    }
+
+    public void redoMove(Move move){
+        Move redo = new Move(new CellPosition(move.deltaPos().row()*-1,move.deltaPos().col()*-1));
+        movePiece(redo);
     }
 
     @Override
@@ -68,9 +73,23 @@ public class King implements IChessPiece{
                 // check if the square is inside the board boundaries
                 if (board.positionIsOnGrid(new CellPosition(i,j))) {
                     CellPosition nextPos = new CellPosition(i, j);
-                    // check if the square is not occupied or is occupied by an enemy piece
-                    if (!board.isOccupied(nextPos) || board.get(nextPos).getPiece().getAlliance() != pieceColor) {
-                        candidateMoves.add(new Move(new CellPosition(i - row, j - col)));
+
+                    //Check if the move puts the King in check
+                    if(getAlliance() == model.getCurrentPlayersTurn() && model.isCheck()){
+
+                    }
+                    /*
+                    movePiece(new Move(nextPos));
+                    if(model.isCheck()){
+                        redoMove(new Move(nextPos));
+                        break;
+                    } else {
+                        redoMove(new Move(nextPos));
+*/
+                        // check if the square is not occupied or is occupied by an enemy piece
+                        if (!board.isOccupied(nextPos) || board.get(nextPos).getPiece().getAlliance() != pieceColor) {
+                            candidateMoves.add(new Move(new CellPosition(i - row, j - col)));
+
                     }
                 }
             }

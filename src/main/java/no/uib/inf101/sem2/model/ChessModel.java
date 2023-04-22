@@ -9,16 +9,18 @@ import no.uib.inf101.sem2.view.ViewableChessModel;
 
 public class ChessModel implements ViewableChessModel, ControlableChessModel {
     ChessBoard board;
+    ChessAlliance currentPlayersTurn;
 
     public ChessModel(ChessBoard board){
         this.board = board;
+        this.currentPlayersTurn = ChessAlliance.WHITE;
         initiateBoard();
     }
 
     public void initiateBoard(){
         setupBlackPieces();
         setupWhitePieces();
-        setupTestPieces();
+        //setupTestPieces();
     }
 
     private void setupTestPieces() {
@@ -110,8 +112,60 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
 
     public boolean isLegalMove(IChessPiece piece,Move move){
         CellPosition tempPos = new CellPosition(piece.getPos().row()+move.deltaPos().row(),piece.getPos().col()+ move.deltaPos().col());
-        IChessPiece tempPiece = board.getPieceAt(tempPos);
         return (board.positionIsOnGrid(tempPos)) && (piece.getCandidateMoves().contains(move));
+    }
+    public void newTurn(){
+        if(currentPlayersTurn == ChessAlliance.WHITE){
+            currentPlayersTurn = ChessAlliance.BLACK;
+        } else currentPlayersTurn = ChessAlliance.WHITE;
+    }
+
+    public ChessAlliance getCurrentPlayersTurn(){
+        return currentPlayersTurn;
+    }
+
+    public CellPosition getKingPosition(ChessAlliance alliance){
+        for(GridCell<Tile> cell : getTilesOnBoard()){
+            Tile tile = cell.value();
+            if(tile.getPiece() instanceof King && tile.getPiece().getAlliance() == alliance){
+                return cell.pos();
+            }
+        }
+        //Should never be the case as there must always be a king alive for the game to be played
+        System.out.println("This shouldnt happen");
+        return null;
+    }
+
+    public boolean isCheck(){
+        ChessAlliance alliance = this.currentPlayersTurn;
+        CellPosition kingPos = getKingPosition(alliance);
+        ChessAlliance oppAlliance;
+
+        if (alliance == ChessAlliance.WHITE) {
+             oppAlliance = ChessAlliance.BLACK;
+        } else {
+             oppAlliance = ChessAlliance.WHITE;
+        }
+
+        for(GridCell<Tile> cell : getTilesOnBoard()){
+            Tile tile = cell.value();
+            if (tile.getPiece() != null) {
+                if (tile.getPiece().getAlliance() == oppAlliance) {
+                    if (canAttack(tile.getPiece().getPos(), kingPos)) {
+                        return true;
+                    }
+                }
+            }
+        } return false;
+    }
+
+    public boolean canAttack(CellPosition attacker, CellPosition target){
+        Move tryMove = new Move(new CellPosition(target.row()-attacker.row(),target.col()-attacker.col()));
+        for(Move move : getBoard().get(attacker).getPiece().getCandidateMoves()){
+            if (move.compareTo(tryMove) == 0){
+                return true;
+            }
+        } return false;
     }
 
     public ChessBoard getBoard(){

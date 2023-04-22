@@ -11,6 +11,7 @@ import javax.swing.text.View;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
+import java.sql.SQLOutput;
 
 public class ChessController extends MouseAdapter {
 
@@ -33,17 +34,23 @@ public class ChessController extends MouseAdapter {
 
         @Override
         public void mousePressed(MouseEvent event) {
+            if(model.isCheck()){
+                System.out.println("SJAKK");
+            }
+
+            //If no piece is selected, get possible moves from the piece at clicked tile, prepare for it to be moved
             if(selectedPiece == null){
                 Point2D mouseCoordinate = event.getPoint();
                 CellPositionToPixelConverter converter = this.view.getCellPositionToPixelConverter();
                 CellPosition pos = converter.getCellPositionOfPoint(mouseCoordinate);
                 IChessPiece piece = model.getBoard().getPieceAt(pos);
-                if(piece != null){
-                    piece.updateCandidateMoves();
+                if(piece != null && piece.getAlliance() == model.getCurrentPlayersTurn()){
                     selectedPiece = piece;
+                    piece.updateCandidateMoves();
                     System.out.println(piece.getCandidateMoves());
                 } else System.out.println("No Piece here!");
 
+                //If you have a selected piece, try to move it to the tile you clicked
             } else {
                 Point2D mouseCoordinate = event.getPoint();
                 CellPositionToPixelConverter converter = this.view.getCellPositionToPixelConverter();
@@ -55,17 +62,30 @@ public class ChessController extends MouseAdapter {
                 Move move = new Move(new CellPosition(deltaRow, deltaCol));
 
                 if(model.isLegalMove(selectedPiece,move)){
+                    IChessPiece tempPiece = model.getBoard().getPieceAt(newPos);
+
                     selectedPiece.movePiece(move);
                     model.getBoard().get(newPos).setPiece(selectedPiece);
                     model.getBoard().get(oldPos).setPiece(null);
+
+                    if(model.isCheck()){
+                        selectedPiece.redoMove(move);
+                        model.getBoard().get(newPos).setPiece(tempPiece);
+                        model.getBoard().get(oldPos).setPiece(selectedPiece);
+                        System.out.println("You cant move yourself into check");
+                        selectedPiece = null;
+                        return;
+                    }
+
                     selectedPiece = null;
-                    System.out.println("Piece at new pos: "+model.getBoard().get(newPos).getPiece());
-                    System.out.println("Piece at old pos: "+model.getBoard().get(oldPos).getPiece());
+                    model.newTurn();
+
 
                 } else{
                     System.out.println("Illegal move");
                     selectedPiece = null;
                 }
             }
+
         }
 }

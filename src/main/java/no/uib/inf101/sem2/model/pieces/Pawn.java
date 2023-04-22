@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pawn implements IChessPiece{
+    private ChessModel model;
     private final ChessBoard board;
     private CellPosition pos;
     private final ChessAlliance pieceColor;
@@ -19,6 +20,7 @@ public class Pawn implements IChessPiece{
     public Pawn(ChessModel model, CellPosition position,ChessAlliance color){
         this.pos = position;
         this.pieceColor = color;
+        this.model = model;
         this.board = model.getBoard();
 
         if(this.pieceColor == ChessAlliance.WHITE){
@@ -37,11 +39,20 @@ public class Pawn implements IChessPiece{
     public void updateCandidateMoves(){
        this.candidateMoves.clear();
 
+        if(model.isCheck()){
+            return;
+        }
+
        if(pieceColor == ChessAlliance.WHITE){
            updateWhiteMoves();
        } else {
            updateBlackMoves();
        }
+    }
+
+    @Override
+    public void redoMove(Move move) {
+
     }
 
     private void updateBlackMoves() {

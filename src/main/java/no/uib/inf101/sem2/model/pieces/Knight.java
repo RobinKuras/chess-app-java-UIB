@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Knight implements IChessPiece{
+    private ChessModel model;
     private ChessBoard board;
     private CellPosition pos;
     private final ChessAlliance pieceColor;
@@ -18,6 +19,7 @@ public class Knight implements IChessPiece{
     public Knight(ChessModel model, CellPosition position, ChessAlliance color){
         this.pos = position;
         this.pieceColor = color;
+        this.model = model;
         this.board = model.getBoard();
 
         if(this.pieceColor == ChessAlliance.WHITE){
@@ -57,6 +59,10 @@ public class Knight implements IChessPiece{
     @Override
     public void updateCandidateMoves() {
         this.candidateMoves.clear();
+
+        if(model.isCheck()){
+            return;
+        }
 
         int row = pos.row();
         int col = pos.col();
@@ -136,5 +142,10 @@ public class Knight implements IChessPiece{
                 }
             } else candidateMoves.add(new Move(new CellPosition(1,-2)));
         }
+    }
+
+    @Override
+    public void redoMove(Move move) {
+
     }
 }

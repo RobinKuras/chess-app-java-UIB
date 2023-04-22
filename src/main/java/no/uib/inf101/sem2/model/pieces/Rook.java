@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Rook implements IChessPiece{
+    private ChessModel model;
     private final ChessBoard board;
     private CellPosition pos;
     private final ChessAlliance pieceColor;
@@ -19,6 +20,7 @@ public class Rook implements IChessPiece{
     public Rook(ChessModel model, CellPosition position, ChessAlliance color){
         this.pos = position;
         this.pieceColor = color;
+        this.model = model;
         this.board = model.getBoard();
 
         if(this.pieceColor == ChessAlliance.WHITE){
@@ -57,6 +59,10 @@ public class Rook implements IChessPiece{
     @Override
     public void updateCandidateMoves() {
         this.candidateMoves.clear();
+
+        if(model.isCheck()){
+            return;
+        }
 
         int row = pos.row();
         int col = pos.col();
@@ -100,5 +106,10 @@ public class Rook implements IChessPiece{
                 } break;
             } else candidateMoves.add(new Move(new CellPosition(nextPos.row()-row, nextPos.col()-col)));
         }
+    }
+
+    @Override
+    public void redoMove(Move move) {
+
     }
 }

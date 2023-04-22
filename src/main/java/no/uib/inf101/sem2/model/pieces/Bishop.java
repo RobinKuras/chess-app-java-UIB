@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bishop implements IChessPiece{
+    private ChessModel model;
     private ChessBoard board;
     private CellPosition pos;
     private final ChessAlliance pieceColor;
@@ -18,6 +19,7 @@ public class Bishop implements IChessPiece{
     public Bishop(ChessModel model, CellPosition position, ChessAlliance color){
         this.pos = position;
         this.pieceColor = color;
+        this.model = model;
         this.board = model.getBoard();
 
         if(this.pieceColor == ChessAlliance.WHITE){
@@ -55,6 +57,10 @@ public class Bishop implements IChessPiece{
     @Override
     public void updateCandidateMoves() {
         this.candidateMoves.clear();
+
+        if(model.isCheck()){
+            return;
+        }
 
         int row = pos.row();
         int col = pos.col();
@@ -110,5 +116,10 @@ public class Bishop implements IChessPiece{
                 candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
             }
         }
+    }
+
+    @Override
+    public void redoMove(Move move) {
+
     }
 }

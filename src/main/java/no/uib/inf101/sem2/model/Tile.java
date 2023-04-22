@@ -31,16 +31,16 @@ public class Tile {
         this.color = this.checkAlliance();
     }
 
-    public void changeOccupiedStatus(){
+    private void changeOccupiedStatus(){
         this.isOccupied = !this.isOccupied;
     }
 
     public void setPiece(IChessPiece newPiece){
-        this.piece = newPiece;
-        if(newPiece != null){
+        if(this.piece == null && newPiece != null){
             this.changeOccupiedStatus();
-        } else {
+        } else if(this.piece != null && newPiece == null){
             this.changeOccupiedStatus();}
+        this.piece = newPiece;
     }
 
     public ChessAlliance checkAlliance(){
@@ -58,5 +58,10 @@ public class Tile {
 
     public boolean getIsOccupied() {
         return isOccupied;
+    }
+
+    @Override
+    public String toString(){
+        return "Occupied: "+this.isOccupied+"\n"+this.piece+this.piece.getAlliance();
     }
 }

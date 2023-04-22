@@ -13,4 +13,5 @@ public interface IChessPiece {
     CellPosition getPos();
     List<Move> getCandidateMoves();
     void updateCandidateMoves();
+    void redoMove(Move move);
 }
