@@ -1,9 +1,11 @@
 package no.uib.inf101.sem2.model.pieces;
 
 import no.uib.inf101.sem2.grid.CellPosition;
+import no.uib.inf101.sem2.grid.GridCell;
 import no.uib.inf101.sem2.model.ChessBoard;
 import no.uib.inf101.sem2.model.ChessModel;
 import no.uib.inf101.sem2.model.Move;
+import no.uib.inf101.sem2.model.Tile;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -26,6 +28,36 @@ public class Pawn implements IChessPiece{
         if(this.pieceColor == ChessAlliance.WHITE){
             this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_White-Pawn.png");
         } else this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_Black-Pawn.png");
+    }
+
+    public void addCandidateMove(Move move){
+        if(!resultsInCheck(move)){
+            candidateMoves.add(move);
+        }
+    }
+
+    public boolean resultsInCheck(Move move){
+        ChessAlliance alliance = model.getCurrentPlayersTurn();
+        ChessAlliance oppAlliance;
+
+        if (alliance == ChessAlliance.WHITE) {
+            oppAlliance = ChessAlliance.BLACK;
+        } else {
+            oppAlliance = ChessAlliance.WHITE;
+        }
+
+        for(GridCell<Tile> cell : model.getTilesOnBoard()){
+            Tile tile = cell.value();
+            if (tile.getPiece() != null) {
+                if (tile.getPiece().getAlliance() == oppAlliance) {
+                    for(Move candMove : tile.getPiece().getCandidateMoves()){
+                        if(candMove.getDestination().equals(move.getDestination())) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        } return false;
     }
 
     @Override
@@ -51,6 +83,11 @@ public class Pawn implements IChessPiece{
     }
 
     @Override
+    public boolean isAttacking() {
+        return false;
+    }
+
+    @Override
     public void redoMove(Move move) {
 
     }
@@ -59,19 +96,19 @@ public class Pawn implements IChessPiece{
 
         //Checks if pawn has moved, and can do pawn jump (2 tiles)
         if(pos.row() == 1 && !board.isOccupied(new CellPosition(pos.row()+2, pos.col())) && !board.isOccupied(new CellPosition(pos.row()+1, pos.col()))){
-            candidateMoves.add(new Move(new CellPosition(2,0)));
+            candidateMoves.add(new Move(this,new CellPosition(2,0)));
         }
 
         //Checks if pawn can do a regular move (1 tile)
         if(!board.isOccupied(new CellPosition(pos.row()+1, pos.col()))){
-            candidateMoves.add(new Move(new CellPosition(1,0)));
+            candidateMoves.add(new Move(this,new CellPosition(1,0)));
         }
 
         //Checks if diagonal move to the right is legal
         if(pos.col() != 7){
             if(board.isOccupied(new CellPosition(pos.row()+1,pos.col()+1))) {
                 if (board.get(new CellPosition(pos.row()+1, pos.col()+1)).getPiece().getAlliance() == ChessAlliance.WHITE) {
-                    candidateMoves.add(new Move(new CellPosition(1, 1)));
+                    candidateMoves.add(new Move(this,new CellPosition(1, 1)));
                 }
             }
         }
@@ -80,7 +117,7 @@ public class Pawn implements IChessPiece{
         if(pos.col() != 0){
             if(board.isOccupied(new CellPosition(pos.row()+1,pos.col()-1))) {
                 if (board.get(new CellPosition(pos.row()+1, pos.col()-1)).getPiece().getAlliance() == ChessAlliance.WHITE) {
-                    candidateMoves.add(new Move(new CellPosition(1, -1)));
+                    candidateMoves.add(new Move(this,new CellPosition(1, -1)));
                 }
             }
         }
@@ -90,19 +127,19 @@ public class Pawn implements IChessPiece{
     private void updateWhiteMoves() {
         //Checks if pawn has moved, and can do pawn jump (2 tiles)
         if(pos.row() == 6 && !board.isOccupied(new CellPosition(pos.row()-2, pos.col())) && !board.isOccupied(new CellPosition(pos.row()-1, pos.col()))){
-            candidateMoves.add(new Move(new CellPosition(-2,0)));
+            candidateMoves.add(new Move(this,new CellPosition(-2,0)));
         }
 
         //Checks if pawn can do a regular move (1 tile)
         if(!board.isOccupied(new CellPosition(pos.row()-1, pos.col()))){
-            candidateMoves.add(new Move(new CellPosition(-1,0)));
+            candidateMoves.add(new Move(this,new CellPosition(-1,0)));
         }
 
         //Checks if diagonal move to the right is legal
         if(pos.col() != 7){
             if(board.isOccupied(new CellPosition(pos.row()-1,pos.col()+1))) {
                 if (board.get(new CellPosition(pos.row() - 1, pos.col() + 1)).getPiece().getAlliance() == ChessAlliance.BLACK) {
-                    candidateMoves.add(new Move(new CellPosition(-1, 1)));
+                    candidateMoves.add(new Move(this,new CellPosition(-1, 1)));
                 }
             }
         }
@@ -111,7 +148,7 @@ public class Pawn implements IChessPiece{
         if(pos.col() != 0){
             if(board.isOccupied(new CellPosition(pos.row()-1,pos.col()-1))) {
                 if (board.get(new CellPosition(pos.row() - 1, pos.col() - 1)).getPiece().getAlliance() == ChessAlliance.BLACK) {
-                    candidateMoves.add(new Move(new CellPosition(-1, -1)));
+                    candidateMoves.add(new Move(this,new CellPosition(-1, -1)));
                 }
             }
         }

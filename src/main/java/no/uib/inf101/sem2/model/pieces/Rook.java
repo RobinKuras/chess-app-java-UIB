@@ -1,9 +1,11 @@
 package no.uib.inf101.sem2.model.pieces;
 
 import no.uib.inf101.sem2.grid.CellPosition;
+import no.uib.inf101.sem2.grid.GridCell;
 import no.uib.inf101.sem2.model.ChessBoard;
 import no.uib.inf101.sem2.model.ChessModel;
 import no.uib.inf101.sem2.model.Move;
+import no.uib.inf101.sem2.model.Tile;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -26,6 +28,36 @@ public class Rook implements IChessPiece{
         if(this.pieceColor == ChessAlliance.WHITE){
             this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_White-Rook.png");
         } else this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_Black-Rook.png");
+    }
+
+    public void addCandidateMove(Move move){
+        if(!resultsInCheck(move)){
+            candidateMoves.add(move);
+        }
+    }
+
+    public boolean resultsInCheck(Move move){
+        ChessAlliance alliance = model.getCurrentPlayersTurn();
+        ChessAlliance oppAlliance;
+
+        if (alliance == ChessAlliance.WHITE) {
+            oppAlliance = ChessAlliance.BLACK;
+        } else {
+            oppAlliance = ChessAlliance.WHITE;
+        }
+
+        for(GridCell<Tile> cell : model.getTilesOnBoard()){
+            Tile tile = cell.value();
+            if (tile.getPiece() != null) {
+                if (tile.getPiece().getAlliance() == oppAlliance) {
+                    for(Move candMove : tile.getPiece().getCandidateMoves()){
+                        if(candMove.getDestination().equals(move.getDestination())) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        } return false;
     }
 
     @Override
@@ -60,10 +92,6 @@ public class Rook implements IChessPiece{
     public void updateCandidateMoves() {
         this.candidateMoves.clear();
 
-        if(model.isCheck()){
-            return;
-        }
-
         int row = pos.row();
         int col = pos.col();
 
@@ -72,9 +100,9 @@ public class Rook implements IChessPiece{
             CellPosition nextPos = new CellPosition(row,i);
             if(board.isOccupied(nextPos)){
                 if(board.get(nextPos).getPiece().getAlliance() != pieceColor){
-                    candidateMoves.add(new Move(new CellPosition(nextPos.row()-row, nextPos.col()-col)));
+                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
                 } break;
-            } else candidateMoves.add(new Move(new CellPosition(nextPos.row()-row, nextPos.col()-col)));
+            } else candidateMoves.add(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
         }
 
         //sets up candidate moves to the left of the rook
@@ -82,9 +110,9 @@ public class Rook implements IChessPiece{
             CellPosition nextPos = new CellPosition(row,i);
             if(board.isOccupied(nextPos)){
                 if(board.get(nextPos).getPiece().getAlliance() != pieceColor){
-                    candidateMoves.add(new Move(new CellPosition(nextPos.row()-row, nextPos.col()-col)));
+                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
                 } break;
-            } else candidateMoves.add(new Move(new CellPosition(nextPos.row()-row, nextPos.col()-col)));
+            } else candidateMoves.add(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
         }
 
         //sets up candidate moves of the rook, upwards toward black start
@@ -92,9 +120,9 @@ public class Rook implements IChessPiece{
             CellPosition nextPos = new CellPosition(i,col);
             if(board.isOccupied(nextPos)){
                 if(board.get(nextPos).getPiece().getAlliance() != pieceColor){
-                    candidateMoves.add(new Move(new CellPosition(nextPos.row()-row, nextPos.col()-col)));
+                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
                 } break;
-            } else candidateMoves.add(new Move(new CellPosition(nextPos.row()-row, nextPos.col()-col)));
+            } else candidateMoves.add(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
         }
 
         //sets up candidate moves of the rook, backwards toward white start
@@ -102,10 +130,15 @@ public class Rook implements IChessPiece{
             CellPosition nextPos = new CellPosition(i,col);
             if(board.isOccupied(nextPos)){
                 if(board.get(nextPos).getPiece().getAlliance() != pieceColor){
-                    candidateMoves.add(new Move(new CellPosition(nextPos.row()-row, nextPos.col()-col)));
+                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
                 } break;
-            } else candidateMoves.add(new Move(new CellPosition(nextPos.row()-row, nextPos.col()-col)));
+            } else candidateMoves.add(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
         }
+    }
+
+    @Override
+    public boolean isAttacking() {
+        return false;
     }
 
     @Override

@@ -90,7 +90,7 @@ public class ChessView extends JPanel {
         drawGame(g2);
 
         // Draw the text
-        String turn = model.getCurrentPlayersTurn().toString()+" turn!";
+        String turn = model.getCurrentPlayersTurn().toString()+" turn! -- In check:"+model.isCheck();
         g2.setColor(Color.WHITE);
         g2.setFont(new Font("SansSerif", Font.PLAIN, 20));
         FontMetrics fm = g2.getFontMetrics();

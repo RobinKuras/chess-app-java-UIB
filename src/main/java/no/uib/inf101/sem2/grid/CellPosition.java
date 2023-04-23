@@ -1,5 +1,7 @@
 package no.uib.inf101.sem2.grid;
 
+import no.uib.inf101.sem2.model.Move;
+
 /**
  * A CellPosition consists of a coordinate with a row and a column index.
  *
@@ -11,6 +13,15 @@ public record CellPosition(int row, int col) implements Comparable<CellPosition>
     @Override
     public String toString(){
         return this.row+", "+this.col;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof CellPosition) {
+            CellPosition otherPos = (CellPosition) obj;
+            return this.row() == otherPos.row() && this.col() == otherPos.col();
+        }
+        return false;
     }
 
     @Override

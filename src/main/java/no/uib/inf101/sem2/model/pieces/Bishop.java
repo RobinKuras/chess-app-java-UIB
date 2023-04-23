@@ -1,9 +1,11 @@
 package no.uib.inf101.sem2.model.pieces;
 
 import no.uib.inf101.sem2.grid.CellPosition;
+import no.uib.inf101.sem2.grid.GridCell;
 import no.uib.inf101.sem2.model.ChessBoard;
 import no.uib.inf101.sem2.model.ChessModel;
 import no.uib.inf101.sem2.model.Move;
+import no.uib.inf101.sem2.model.Tile;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ public class Bishop implements IChessPiece{
     private CellPosition pos;
     private final ChessAlliance pieceColor;
     private ImageIcon imageIcon;
+    private boolean isAttacking;
     private List<Move> candidateMoves = new ArrayList<>();
     public Bishop(ChessModel model, CellPosition position, ChessAlliance color){
         this.pos = position;
@@ -22,9 +25,43 @@ public class Bishop implements IChessPiece{
         this.model = model;
         this.board = model.getBoard();
 
+
         if(this.pieceColor == ChessAlliance.WHITE){
             this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_White-Bishop.png");
         } else this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_Black-Bishop.png");
+    }
+
+    public void addCandidateMove(Move move){
+        if(!resultsInCheck(move)){
+            candidateMoves.add(move);
+        } else if(board.get(move.getDestination()).getPiece() != null && board.get(move.getDestination()).getPiece().isAttacking()){
+            candidateMoves.add(move);
+        }
+    }
+
+    public boolean resultsInCheck(Move move){
+        ChessAlliance alliance = model.getCurrentPlayersTurn();
+        CellPosition kingPos = model.getKingPosition(alliance);
+        ChessAlliance oppAlliance;
+
+        if (alliance == ChessAlliance.WHITE) {
+            oppAlliance = ChessAlliance.BLACK;
+        } else {
+            oppAlliance = ChessAlliance.WHITE;
+        }
+
+        for(GridCell<Tile> cell : model.getTilesOnBoard()){
+            Tile tile = cell.value();
+            if (tile.getPiece() != null) {
+                if (tile.getPiece().getAlliance() == oppAlliance) {
+                    for(Move candMove : tile.getPiece().getCandidateMoves()){
+                        if(candMove.getDestination().equals(kingPos)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        } return false;
     }
 
     @Override
@@ -58,10 +95,6 @@ public class Bishop implements IChessPiece{
     public void updateCandidateMoves() {
         this.candidateMoves.clear();
 
-        if(model.isCheck()){
-            return;
-        }
-
         int row = pos.row();
         int col = pos.col();
 
@@ -70,11 +103,11 @@ public class Bishop implements IChessPiece{
             CellPosition nextPos = new CellPosition(row - i, col + i);
             if (board.isOccupied(nextPos)) {
                 if (board.get(nextPos).getPiece().getAlliance() != pieceColor) {
-                    candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                    addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
                 }
                 break;
             } else {
-                candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
             }
         }
 
@@ -83,11 +116,11 @@ public class Bishop implements IChessPiece{
             CellPosition nextPos = new CellPosition(row - i, col - i);
             if (board.isOccupied(nextPos)) {
                 if (board.get(nextPos).getPiece().getAlliance() != pieceColor) {
-                    candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                    addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
                 }
                 break;
             } else {
-                candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
             }
         }
 
@@ -96,11 +129,11 @@ public class Bishop implements IChessPiece{
             CellPosition nextPos = new CellPosition(row + i, col - i);
             if (board.isOccupied(nextPos)) {
                 if (board.get(nextPos).getPiece().getAlliance() != pieceColor) {
-                    candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                    addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
                 }
                 break;
             } else {
-                candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
             }
         }
 
@@ -109,13 +142,18 @@ public class Bishop implements IChessPiece{
             CellPosition nextPos = new CellPosition(row + i, col + i);
             if (board.isOccupied(nextPos)) {
                 if (board.get(nextPos).getPiece().getAlliance() != pieceColor) {
-                    candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                    addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
                 }
                 break;
             } else {
-                candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
             }
         }
+    }
+
+    @Override
+    public boolean isAttacking() {
+        return false;
     }
 
     @Override

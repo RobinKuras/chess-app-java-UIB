@@ -1,9 +1,11 @@
 package no.uib.inf101.sem2.model.pieces;
 
 import no.uib.inf101.sem2.grid.CellPosition;
+import no.uib.inf101.sem2.grid.GridCell;
 import no.uib.inf101.sem2.model.ChessBoard;
 import no.uib.inf101.sem2.model.ChessModel;
 import no.uib.inf101.sem2.model.Move;
+import no.uib.inf101.sem2.model.Tile;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -27,6 +29,36 @@ public class King implements IChessPiece{
         } else this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_Black-King.png");
     }
 
+    public void addCandidateMove(Move move){
+        if(!resultsInCheck(move)){
+            candidateMoves.add(move);
+        }
+    }
+
+    public boolean resultsInCheck(Move move){
+        ChessAlliance alliance = model.getCurrentPlayersTurn();
+        ChessAlliance oppAlliance;
+
+        if (alliance == ChessAlliance.WHITE) {
+            oppAlliance = ChessAlliance.BLACK;
+        } else {
+            oppAlliance = ChessAlliance.WHITE;
+        }
+
+        for(GridCell<Tile> cell : model.getTilesOnBoard()){
+            Tile tile = cell.value();
+            if (tile.getPiece() != null) {
+                if (tile.getPiece().getAlliance() == oppAlliance) {
+                    for(Move candMove : tile.getPiece().getCandidateMoves()){
+                        if(candMove.getDestination().equals(move.getDestination())) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        } return false;
+    }
+
 
     @Override
     public void movePiece(Move move) {
@@ -36,7 +68,7 @@ public class King implements IChessPiece{
     }
 
     public void redoMove(Move move){
-        Move redo = new Move(new CellPosition(move.deltaPos().row()*-1,move.deltaPos().col()*-1));
+        Move redo = new Move(this,new CellPosition(move.deltaPos().row()*-1,move.deltaPos().col()*-1));
         movePiece(redo);
     }
 
@@ -74,25 +106,20 @@ public class King implements IChessPiece{
                 if (board.positionIsOnGrid(new CellPosition(i,j))) {
                     CellPosition nextPos = new CellPosition(i, j);
 
-                    //Check if the move puts the King in check
-                    if(getAlliance() == model.getCurrentPlayersTurn() && model.isCheck()){
-
-                    }
-                    /*
-                    movePiece(new Move(nextPos));
-                    if(model.isCheck()){
-                        redoMove(new Move(nextPos));
-                        break;
-                    } else {
-                        redoMove(new Move(nextPos));
-*/
                         // check if the square is not occupied or is occupied by an enemy piece
                         if (!board.isOccupied(nextPos) || board.get(nextPos).getPiece().getAlliance() != pieceColor) {
-                            candidateMoves.add(new Move(new CellPosition(i - row, j - col)));
+
+                            CellPosition deltaPos = new CellPosition(i - row, j - col);
+                            addCandidateMove(new Move(this, deltaPos));
 
                     }
                 }
             }
         }
+    }
+
+    @Override
+    public boolean isAttacking() {
+        return false;
     }
 }

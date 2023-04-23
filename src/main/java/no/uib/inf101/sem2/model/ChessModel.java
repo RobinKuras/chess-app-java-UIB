@@ -141,11 +141,13 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
         CellPosition kingPos = getKingPosition(alliance);
         ChessAlliance oppAlliance;
 
+
         if (alliance == ChessAlliance.WHITE) {
              oppAlliance = ChessAlliance.BLACK;
         } else {
              oppAlliance = ChessAlliance.WHITE;
         }
+
 
         for(GridCell<Tile> cell : getTilesOnBoard()){
             Tile tile = cell.value();
@@ -159,10 +161,12 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
         } return false;
     }
 
+
+
     public boolean canAttack(CellPosition attacker, CellPosition target){
-        Move tryMove = new Move(new CellPosition(target.row()-attacker.row(),target.col()-attacker.col()));
+        Move tryMove = new Move(getBoard().get(attacker).getPiece(),new CellPosition(target.row()-attacker.row(),target.col()-attacker.col()));
         for(Move move : getBoard().get(attacker).getPiece().getCandidateMoves()){
-            if (move.compareTo(tryMove) == 0){
+            if (move.getDestination().equals(tryMove.getDestination())){
                 return true;
             }
         } return false;
@@ -180,4 +184,5 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
     public Iterable<GridCell<Tile>> getTilesOnBoard() {
         return this.board;
     }
+
 }

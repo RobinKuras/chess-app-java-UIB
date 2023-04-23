@@ -1,9 +1,11 @@
 package no.uib.inf101.sem2.model.pieces;
 
 import no.uib.inf101.sem2.grid.CellPosition;
+import no.uib.inf101.sem2.grid.GridCell;
 import no.uib.inf101.sem2.model.ChessBoard;
 import no.uib.inf101.sem2.model.ChessModel;
 import no.uib.inf101.sem2.model.Move;
+import no.uib.inf101.sem2.model.Tile;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -16,15 +18,47 @@ public class Queen implements IChessPiece{
     private final ChessAlliance pieceColor;
     private ImageIcon imageIcon;
     private List<Move> candidateMoves = new ArrayList<>();
+    private boolean isAttacking;
     public Queen(ChessModel model, CellPosition position, ChessAlliance color){
         this.pos = position;
         this.pieceColor = color;
         this.model = model;
         this.board = model.getBoard();
+        this.isAttacking = true;
 
         if(this.pieceColor == ChessAlliance.WHITE){
             this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_White-Queen.png");
         } else this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_Black-Queen.png");
+    }
+
+    public void addCandidateMove(Move move){
+        if(!resultsInCheck(move)){
+            candidateMoves.add(move);
+        }
+    }
+
+    public boolean resultsInCheck(Move move){
+        ChessAlliance alliance = model.getCurrentPlayersTurn();
+        ChessAlliance oppAlliance;
+
+        if (alliance == ChessAlliance.WHITE) {
+            oppAlliance = ChessAlliance.BLACK;
+        } else {
+            oppAlliance = ChessAlliance.WHITE;
+        }
+
+        for(GridCell<Tile> cell : model.getTilesOnBoard()){
+            Tile tile = cell.value();
+            if (tile.getPiece() != null) {
+                if (tile.getPiece().getAlliance() == oppAlliance) {
+                    for(Move candMove : tile.getPiece().getCandidateMoves()){
+                        if(candMove.getDestination().equals(move.getDestination())) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        } return false;
     }
 
 
@@ -71,11 +105,11 @@ public class Queen implements IChessPiece{
             CellPosition nextPos = new CellPosition(row, i);
             if (board.isOccupied(nextPos)) {
                 if (board.get(nextPos).getPiece().getAlliance() != pieceColor) {
-                    candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
                 }
                 break;
             } else {
-                candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
             }
         }
 
@@ -84,11 +118,11 @@ public class Queen implements IChessPiece{
             CellPosition nextPos = new CellPosition(row, i);
             if (board.isOccupied(nextPos)) {
                 if (board.get(nextPos).getPiece().getAlliance() != pieceColor) {
-                    candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
                 }
                 break;
             } else {
-                candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
             }
         }
 
@@ -97,9 +131,9 @@ public class Queen implements IChessPiece{
             CellPosition nextPos = new CellPosition(i,col);
             if(board.isOccupied(nextPos)){
                 if(board.get(nextPos).getPiece().getAlliance() != pieceColor){
-                    candidateMoves.add(new Move(new CellPosition(nextPos.row()-row, nextPos.col()-col)));
+                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
                 } break;
-            } else candidateMoves.add(new Move(new CellPosition(nextPos.row()-row, nextPos.col()-col)));
+            } else candidateMoves.add(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
         }
 
         //sets up candidate moves of the queen, backwards toward white start
@@ -107,9 +141,9 @@ public class Queen implements IChessPiece{
             CellPosition nextPos = new CellPosition(i,col);
             if(board.isOccupied(nextPos)){
                 if(board.get(nextPos).getPiece().getAlliance() != pieceColor){
-                    candidateMoves.add(new Move(new CellPosition(nextPos.row()-row, nextPos.col()-col)));
+                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
                 } break;
-            } else candidateMoves.add(new Move(new CellPosition(nextPos.row()-row, nextPos.col()-col)));
+            } else candidateMoves.add(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
         }
 
         //sets up candidate moves to the top-right diagonal of the queen
@@ -117,11 +151,11 @@ public class Queen implements IChessPiece{
             CellPosition nextPos = new CellPosition(row - i, col + i);
             if (board.isOccupied(nextPos)) {
                 if (board.get(nextPos).getPiece().getAlliance() != pieceColor) {
-                    candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
                 }
                 break;
             } else {
-                candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
             }
         }
 
@@ -130,11 +164,11 @@ public class Queen implements IChessPiece{
             CellPosition nextPos = new CellPosition(row - i, col - i);
             if (board.isOccupied(nextPos)) {
                 if (board.get(nextPos).getPiece().getAlliance() != pieceColor) {
-                    candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
                 }
                 break;
             } else {
-                candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
             }
         }
 
@@ -143,11 +177,11 @@ public class Queen implements IChessPiece{
             CellPosition nextPos = new CellPosition(row + i, col - i);
             if (board.isOccupied(nextPos)) {
                 if (board.get(nextPos).getPiece().getAlliance() != pieceColor) {
-                    candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
                 }
                 break;
             } else {
-                candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
             }
         }
 
@@ -156,13 +190,18 @@ public class Queen implements IChessPiece{
             CellPosition nextPos = new CellPosition(row + i, col + i);
             if (board.isOccupied(nextPos)) {
                 if (board.get(nextPos).getPiece().getAlliance() != pieceColor) {
-                    candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
                 }
                 break;
             } else {
-                candidateMoves.add(new Move(new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
             }
         }
+    }
+
+    @Override
+    public boolean isAttacking() {
+        return isAttacking;
     }
 
     @Override

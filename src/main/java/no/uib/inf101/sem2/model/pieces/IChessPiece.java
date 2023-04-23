@@ -13,5 +13,6 @@ public interface IChessPiece {
     CellPosition getPos();
     List<Move> getCandidateMoves();
     void updateCandidateMoves();
+    boolean isAttacking();
     void redoMove(Move move);
 }

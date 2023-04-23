@@ -34,6 +34,7 @@ public class ChessController extends MouseAdapter {
 
         @Override
         public void mousePressed(MouseEvent event) {
+            System.out.println(model.getCurrentPlayersTurn());
             if(model.isCheck()){
                 System.out.println("SJAKK");
             }
@@ -59,7 +60,7 @@ public class ChessController extends MouseAdapter {
 
                 int deltaRow = newPos.row() - oldPos.row();
                 int deltaCol = newPos.col() - oldPos.col();
-                Move move = new Move(new CellPosition(deltaRow, deltaCol));
+                Move move = new Move(selectedPiece,new CellPosition(deltaRow, deltaCol));
 
                 if(model.isLegalMove(selectedPiece,move)){
                     IChessPiece tempPiece = model.getBoard().getPieceAt(newPos);
@@ -67,7 +68,7 @@ public class ChessController extends MouseAdapter {
                     selectedPiece.movePiece(move);
                     model.getBoard().get(newPos).setPiece(selectedPiece);
                     model.getBoard().get(oldPos).setPiece(null);
-
+/*
                     if(model.isCheck()){
                         selectedPiece.redoMove(move);
                         model.getBoard().get(newPos).setPiece(tempPiece);
@@ -76,7 +77,7 @@ public class ChessController extends MouseAdapter {
                         selectedPiece = null;
                         return;
                     }
-
+*/                  selectedPiece.updateCandidateMoves();
                     selectedPiece = null;
                     model.newTurn();
 
@@ -86,6 +87,5 @@ public class ChessController extends MouseAdapter {
                     selectedPiece = null;
                 }
             }
-
         }
 }

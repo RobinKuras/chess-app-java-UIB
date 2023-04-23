@@ -52,4 +52,5 @@ public class ChessBoard extends Grid<Tile> {
 
         return output;
     }
+
 }
