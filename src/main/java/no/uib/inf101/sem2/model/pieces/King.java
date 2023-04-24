@@ -34,6 +34,8 @@ public class King implements IChessPiece{
     public void addCandidateMove(Move move){
         if(!resultsInCheck(move)){
             candidateMoves.add(move);
+        } else if(board.get(move.getDestination()).getPiece() != null && board.get(move.getDestination()).getPiece().isAttacking()){
+            candidateMoves.add(move);
         }
     }
 

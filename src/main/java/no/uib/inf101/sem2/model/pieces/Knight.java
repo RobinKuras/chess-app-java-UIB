@@ -36,6 +36,8 @@ public class Knight implements IChessPiece{
     public void addCandidateMove(Move move){
         if(!resultsInCheck(move)){
             candidateMoves.add(move);
+        } else if(board.get(move.getDestination()).getPiece() != null && board.get(move.getDestination()).getPiece().isAttacking()){
+            candidateMoves.add(move);
         }
     }
 
@@ -94,10 +96,6 @@ public class Knight implements IChessPiece{
     public void updateCandidateMoves() {
         this.candidateMoves.clear();
 
-        if(model.isCheck()){
-            return;
-        }
-
         int row = pos.row();
         int col = pos.col();
         CellPosition target;
@@ -107,18 +105,18 @@ public class Knight implements IChessPiece{
         if(board.positionIsOnGrid(target)){
             if(board.isOccupied(target)){
                 if(board.getPieceAt(target).getAlliance() != pieceColor){
-                    candidateMoves.add(new Move(this,new CellPosition(-2,1)));
+                    addCandidateMove(new Move(this,new CellPosition(-2,1)));
                 }
-            } else candidateMoves.add(new Move(this,new CellPosition(-2,1)));
+            } else addCandidateMove(new Move(this,new CellPosition(-2,1)));
         }
 
         target = new CellPosition(row-1,col+2);
         if(board.positionIsOnGrid(target)){
             if(board.isOccupied(target)){
                 if(board.getPieceAt(target).getAlliance() != pieceColor){
-                    candidateMoves.add(new Move(this,new CellPosition(-1,2)));
+                    addCandidateMove(new Move(this,new CellPosition(-1,2)));
                 }
-            } else candidateMoves.add(new Move(this,new CellPosition(-1,2)));
+            } else addCandidateMove(new Move(this,new CellPosition(-1,2)));
         }
 
         //checks if L-movement to the top left is legal
@@ -126,36 +124,36 @@ public class Knight implements IChessPiece{
         if(board.positionIsOnGrid(target)){
             if(board.isOccupied(target)){
                 if(board.getPieceAt(target).getAlliance() != pieceColor){
-                    candidateMoves.add(new Move(this,new CellPosition(-2,-1)));
+                    addCandidateMove(new Move(this,new CellPosition(-2,-1)));
                 }
-            } else candidateMoves.add(new Move(this,new CellPosition(-2,-1)));
+            } else addCandidateMove(new Move(this,new CellPosition(-2,-1)));
         }
 
         target = new CellPosition(row-1,col-2);
         if(board.positionIsOnGrid(target)){
             if(board.isOccupied(target)){
                 if(board.getPieceAt(target).getAlliance() != pieceColor){
-                    candidateMoves.add(new Move(this,new CellPosition(-1,-2)));
+                    addCandidateMove(new Move(this,new CellPosition(-1,-2)));
                 }
-            } else candidateMoves.add(new Move(this,new CellPosition(-1,-2)));
+            } else addCandidateMove(new Move(this,new CellPosition(-1,-2)));
         }
         //checks if L-moves to the bottom right is legal
         target = new CellPosition(row+2,col+1);
         if(board.positionIsOnGrid(target)){
             if(board.isOccupied(target)){
                 if(board.getPieceAt(target).getAlliance() != pieceColor){
-                    candidateMoves.add(new Move(this,new CellPosition(2,1)));
+                    addCandidateMove(new Move(this,new CellPosition(2,1)));
                 }
-            } else candidateMoves.add(new Move(this,new CellPosition(2,1)));
+            } else addCandidateMove(new Move(this,new CellPosition(2,1)));
         }
 
         target = new CellPosition(row+1,col+2);
         if(board.positionIsOnGrid(target)){
             if(board.isOccupied(target)){
                 if(board.getPieceAt(target).getAlliance() != pieceColor){
-                    candidateMoves.add(new Move(this,new CellPosition(1,2)));
+                    addCandidateMove(new Move(this,new CellPosition(1,2)));
                 }
-            } else candidateMoves.add(new Move(this,new CellPosition(1,2)));
+            } else addCandidateMove(new Move(this,new CellPosition(1,2)));
         }
 
         //checks if L-movement to the bottom left is legal
@@ -163,18 +161,18 @@ public class Knight implements IChessPiece{
         if(board.positionIsOnGrid(target)){
             if(board.isOccupied(target)){
                 if(board.getPieceAt(target).getAlliance() != pieceColor){
-                    candidateMoves.add(new Move(this,new CellPosition(2,-1)));
+                    addCandidateMove(new Move(this,new CellPosition(2,-1)));
                 }
-            } else candidateMoves.add(new Move(this,new CellPosition(2,-1)));
+            } else addCandidateMove(new Move(this,new CellPosition(2,-1)));
         }
 
         target = new CellPosition(row+1,col-2);
         if(board.positionIsOnGrid(target)){
             if(board.isOccupied(target)){
                 if(board.getPieceAt(target).getAlliance() != pieceColor){
-                    candidateMoves.add(new Move(this,new CellPosition(1,-2)));
+                    addCandidateMove(new Move(this,new CellPosition(1,-2)));
                 }
-            } else candidateMoves.add(new Move(this,new CellPosition(1,-2)));
+            } else addCandidateMove(new Move(this,new CellPosition(1,-2)));
         }
     }
 

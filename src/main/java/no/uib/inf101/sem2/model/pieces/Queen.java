@@ -34,11 +34,14 @@ public class Queen implements IChessPiece{
     public void addCandidateMove(Move move){
         if(!resultsInCheck(move)){
             candidateMoves.add(move);
+        } else if(board.get(move.getDestination()).getPiece() != null && board.get(move.getDestination()).getPiece().isAttacking()){
+            candidateMoves.add(move);
         }
     }
 
     public boolean resultsInCheck(Move move){
         ChessAlliance alliance = model.getCurrentPlayersTurn();
+        CellPosition kingPos = model.getKingPosition(alliance);
         ChessAlliance oppAlliance;
 
         if (alliance == ChessAlliance.WHITE) {
@@ -52,7 +55,7 @@ public class Queen implements IChessPiece{
             if (tile.getPiece() != null) {
                 if (tile.getPiece().getAlliance() == oppAlliance) {
                     for(Move candMove : tile.getPiece().getCandidateMoves()){
-                        if(candMove.getDestination().equals(move.getDestination())) {
+                        if(candMove.getDestination().equals(kingPos)) {
                             return true;
                         }
                     }
@@ -93,10 +96,6 @@ public class Queen implements IChessPiece{
     public void updateCandidateMoves() {
         this.candidateMoves.clear();
 
-        if(model.isCheck()){
-            return;
-        }
-
         int row = pos.row();
         int col = pos.col();
 
@@ -105,11 +104,11 @@ public class Queen implements IChessPiece{
             CellPosition nextPos = new CellPosition(row, i);
             if (board.isOccupied(nextPos)) {
                 if (board.get(nextPos).getPiece().getAlliance() != pieceColor) {
-                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                    addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
                 }
                 break;
             } else {
-                candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
             }
         }
 
@@ -118,11 +117,11 @@ public class Queen implements IChessPiece{
             CellPosition nextPos = new CellPosition(row, i);
             if (board.isOccupied(nextPos)) {
                 if (board.get(nextPos).getPiece().getAlliance() != pieceColor) {
-                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                    addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
                 }
                 break;
             } else {
-                candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
             }
         }
 
@@ -131,9 +130,9 @@ public class Queen implements IChessPiece{
             CellPosition nextPos = new CellPosition(i,col);
             if(board.isOccupied(nextPos)){
                 if(board.get(nextPos).getPiece().getAlliance() != pieceColor){
-                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
+                    addCandidateMove(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
                 } break;
-            } else candidateMoves.add(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
+            } else addCandidateMove(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
         }
 
         //sets up candidate moves of the queen, backwards toward white start
@@ -141,9 +140,9 @@ public class Queen implements IChessPiece{
             CellPosition nextPos = new CellPosition(i,col);
             if(board.isOccupied(nextPos)){
                 if(board.get(nextPos).getPiece().getAlliance() != pieceColor){
-                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
+                    addCandidateMove(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
                 } break;
-            } else candidateMoves.add(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
+            } else addCandidateMove(new Move(this,new CellPosition(nextPos.row()-row, nextPos.col()-col)));
         }
 
         //sets up candidate moves to the top-right diagonal of the queen
@@ -151,11 +150,11 @@ public class Queen implements IChessPiece{
             CellPosition nextPos = new CellPosition(row - i, col + i);
             if (board.isOccupied(nextPos)) {
                 if (board.get(nextPos).getPiece().getAlliance() != pieceColor) {
-                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                    addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
                 }
                 break;
             } else {
-                candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
             }
         }
 
@@ -164,11 +163,11 @@ public class Queen implements IChessPiece{
             CellPosition nextPos = new CellPosition(row - i, col - i);
             if (board.isOccupied(nextPos)) {
                 if (board.get(nextPos).getPiece().getAlliance() != pieceColor) {
-                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                    addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
                 }
                 break;
             } else {
-                candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
             }
         }
 
@@ -177,11 +176,11 @@ public class Queen implements IChessPiece{
             CellPosition nextPos = new CellPosition(row + i, col - i);
             if (board.isOccupied(nextPos)) {
                 if (board.get(nextPos).getPiece().getAlliance() != pieceColor) {
-                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                    addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
                 }
                 break;
             } else {
-                candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
             }
         }
 
@@ -190,11 +189,11 @@ public class Queen implements IChessPiece{
             CellPosition nextPos = new CellPosition(row + i, col + i);
             if (board.isOccupied(nextPos)) {
                 if (board.get(nextPos).getPiece().getAlliance() != pieceColor) {
-                    candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                    addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
                 }
                 break;
             } else {
-                candidateMoves.add(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
+                addCandidateMove(new Move(this,new CellPosition(nextPos.row() - row, nextPos.col() - col)));
             }
         }
     }
