@@ -1,15 +1,15 @@
 package no.uib.inf101.sem2.model;
 
-import no.uib.inf101.sem2.controller.ControlableChessModel;
+import no.uib.inf101.sem2.controller.ControllableChessModel;
 import no.uib.inf101.sem2.grid.CellPosition;
 import no.uib.inf101.sem2.grid.GridCell;
 import no.uib.inf101.sem2.grid.GridDimension;
 import no.uib.inf101.sem2.model.pieces.*;
 import no.uib.inf101.sem2.view.ViewableChessModel;
 
-public class ChessModel implements ViewableChessModel, ControlableChessModel {
-    ChessBoard board;
-    ChessAlliance currentPlayersTurn;
+public class ChessModel implements ViewableChessModel, ControllableChessModel {
+    private final ChessBoard board;
+    private ChessAlliance currentPlayersTurn;
 
     public ChessModel(ChessBoard board){
         this.board = board;
@@ -17,11 +17,17 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
         initiateBoard();
     }
 
+    /**
+     * sets up the chess board with pieces
+     */
     public void initiateBoard(){
         setupBlackPieces();
         setupWhitePieces();
     }
 
+    /**
+     * sets up all the black pieces by creating ChessPiece objects, and then setting them to Tile objects in our grid
+     */
     public void setupBlackPieces(){
         //Sets up all black pawns
         for (int i = 0; i < board.getCols(); i++) {
@@ -56,6 +62,10 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
         King bKing = new King(this,new CellPosition(0, 3), ChessAlliance.BLACK);
         board.get(bKing.getPos()).setPiece(bKing);
     }
+
+    /**
+     * sets up all the white pieces by creating ChessPiece objects, and then setting them to Tile objects in our grid
+     */
     public void setupWhitePieces(){
         //Sets up all white pawns
         for (int i = 0; i < board.getCols(); i++) {
@@ -102,10 +112,19 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
         } else currentPlayersTurn = ChessAlliance.WHITE;
     }
 
+    /**
+     *
+     * @return the chess alliance of the currently active player
+     */
     public ChessAlliance getCurrentPlayersTurn(){
         return currentPlayersTurn;
     }
 
+    /**
+     *
+     * @param alliance the color of the king you want to find the location of
+     * @return the cell position of king belonging to the given alliance
+     */
     public CellPosition getKingPosition(ChessAlliance alliance){
         for(GridCell<Tile> cell : getTilesOnBoard()){
             Tile tile = cell.value();
@@ -118,6 +137,11 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
         return null;
     }
 
+    /**
+     * Goes through all the enemy pieces of the currently active player.
+     * Checks to see whether any opponent can currently attack the allied king.
+     * @return true if any opposing piece can attack the king, false if not.
+     */
     public boolean isCheck(){
         ChessAlliance alliance = this.currentPlayersTurn;
         CellPosition kingPos = getKingPosition(alliance);
@@ -145,7 +169,8 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
 
 
     /**
-     *
+     * Takes in two cell positions of the board, to see if the piece of the "attacker" pos, can attack the piece
+     * at the "target" pos.
      * @param attacker the attacking piece
      * @param target the piece "attacker" wants to attack
      * @return if the target position is the destination of the one of the candidateMoves of the attacker, return true, else return false
@@ -159,6 +184,10 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
         } return false;
     }
 
+    /**
+     * Iterates through all the allied pieces to check if any piece has a legal candidate move.
+     * @return true if no allied piece has any legal moves, false if there still is a possible move.
+     */
     public boolean isCheckMate(){
         for(GridCell<Tile> tile : getTilesOnBoard()){
             if(tile.value().getPiece() != null && tile.value().getPiece().getAlliance() == currentPlayersTurn){
@@ -172,7 +201,7 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
 
     /**
      *
-     * @return the board object of the model
+     * @return get the board object of the model
      */
     public ChessBoard getBoard(){
         return this.board;

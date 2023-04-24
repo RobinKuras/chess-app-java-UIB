@@ -4,10 +4,10 @@ import no.uib.inf101.sem2.model.ChessBoard;
 import no.uib.inf101.sem2.model.Move;
 import no.uib.inf101.sem2.model.pieces.ChessAlliance;
 
-public interface ControlableChessModel {
+public interface ControllableChessModel {
     /**
      *
-     * @param move we want to check
+     * @param move the Move-object we want to see if is legal
      * @return true if the move is a legal move, false if not
      */
     boolean isLegalMove(Move move);

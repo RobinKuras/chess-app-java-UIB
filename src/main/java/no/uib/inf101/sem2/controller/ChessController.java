@@ -12,7 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
 public class ChessController extends MouseAdapter {
-        private final ControlableChessModel model;
+        private final ControllableChessModel model;
         private final ChessView view;
         private IChessPiece selectedPiece;
 

@@ -12,18 +12,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class King implements IChessPiece{
-    private ChessModel model;
-    private ChessBoard board;
+    private final ChessModel model;
+    private final ChessBoard board;
     private CellPosition pos;
     private final ChessAlliance pieceColor;
-    private ImageIcon imageIcon;
+    private final ImageIcon imageIcon;
     private boolean isAttacking;
-    private List<Move> candidateMoves = new ArrayList<>();
+    private final List<Move> candidateMoves = new ArrayList<>();
+    /**
+     * The constructor of the chess piece representing kings.
+     * @param model the model the piece is a part of, to gain access to all other pieces positions.
+     * @param position the current position on the chess board.
+     * @param color the chess alliance of the piece. WHITE/BLACK
+     */
     public King(ChessModel model, CellPosition position, ChessAlliance color){
-        this.pos = position;
-        this.pieceColor = color;
         this.model = model;
         this.board = model.getBoard();
+        this.pos = position;
+        this.pieceColor = color;
         this.isAttacking = false;
 
         if(this.pieceColor == ChessAlliance.WHITE){
@@ -31,6 +37,7 @@ public class King implements IChessPiece{
         } else this.imageIcon = new ImageIcon("src/main/resources/Chess_Black-King.png");
     }
 
+    @Override
     public void addCandidateMove(Move move){
         if(!resultsInCheck(move)){
             candidateMoves.add(move);
@@ -39,6 +46,7 @@ public class King implements IChessPiece{
         }
     }
 
+    @Override
     public boolean resultsInCheck(Move move){
         ChessAlliance alliance = model.getCurrentPlayersTurn();
         ChessAlliance oppAlliance;
@@ -49,31 +57,24 @@ public class King implements IChessPiece{
             oppAlliance = ChessAlliance.WHITE;
         }
 
+
         for(GridCell<Tile> cell : model.getTilesOnBoard()){
             Tile tile = cell.value();
             if (tile.getPiece() != null) {
                 if (tile.getPiece().getAlliance() == oppAlliance) {
-                    for(Move candMove : tile.getPiece().getCandidateMoves()){
-                        if(candMove.getDestination().equals(move.getDestination())) {
+                    if(model.canAttack(tile.getPiece().getPos(),move.getDestination())) {
                             return true;
-                        }
                     }
                 }
             }
         } return false;
     }
 
-
     @Override
     public void movePiece(Move move) {
         if(candidateMoves.contains(move)){
             this.pos = new CellPosition(this.pos.row()+move.deltaPos().row(),this.pos.col()+move.deltaPos().col());
         }
-    }
-
-    public void redoMove(Move move){
-        Move redo = new Move(this,new CellPosition(move.deltaPos().row()*-1,move.deltaPos().col()*-1));
-        movePiece(redo);
     }
 
     @Override
@@ -92,26 +93,6 @@ public class King implements IChessPiece{
             } else this.isAttacking = false;
         }
         return this.isAttacking;
-    }
-
-    @Override
-    public String getImageFilePath() {
-        return imageIcon.toString();
-    }
-
-    @Override
-    public ChessAlliance getAlliance() {
-        return pieceColor;
-    }
-
-    @Override
-    public CellPosition getPos() {
-        return pos;
-    }
-
-    @Override
-    public List<Move> getCandidateMoves() {
-        return candidateMoves;
     }
 
     @Override
@@ -138,5 +119,31 @@ public class King implements IChessPiece{
                 }
             }
         }
+    }
+
+    @Override
+    public String getImageFilePath() {
+        return imageIcon.toString();
+    }
+
+    @Override
+    public ChessAlliance getAlliance() {
+        return pieceColor;
+    }
+
+    @Override
+    public CellPosition getPos() {
+        return pos;
+    }
+
+    @Override
+    public List<Move> getCandidateMoves() {
+        return candidateMoves;
+    }
+
+    @Override
+    public void redoMove(Move move){
+        Move redo = new Move(this,new CellPosition(move.deltaPos().row()*-1,move.deltaPos().col()*-1));
+        movePiece(redo);
     }
 }

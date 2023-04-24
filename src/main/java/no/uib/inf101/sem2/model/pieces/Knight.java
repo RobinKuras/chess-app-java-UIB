@@ -12,13 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Knight implements IChessPiece{
-    private ChessModel model;
-    private ChessBoard board;
+    private final ChessModel model;
+    private final ChessBoard board;
     private CellPosition pos;
     private final ChessAlliance pieceColor;
-    private ImageIcon imageIcon;
-    private List<Move> candidateMoves = new ArrayList<>();
+    private final ImageIcon imageIcon;
+    private final List<Move> candidateMoves = new ArrayList<>();
     private boolean isAttacking;
+    /**
+     * The constructor of the chess piece representing knights.
+     * @param model the model the piece is a part of, to gain access to all other pieces positions.
+     * @param position the current position on the chess board.
+     * @param color the chess alliance of the piece. WHITE/BLACK
+     */
     public Knight(ChessModel model, CellPosition position, ChessAlliance color){
         this.pos = position;
         this.pieceColor = color;
@@ -33,6 +39,7 @@ public class Knight implements IChessPiece{
         }
     }
 
+    @Override
     public void addCandidateMove(Move move){
         if(!resultsInCheck(move)){
             candidateMoves.add(move);
@@ -41,6 +48,7 @@ public class Knight implements IChessPiece{
         }
     }
 
+    @Override
     public boolean resultsInCheck(Move move){
         ChessAlliance alliance = model.getCurrentPlayersTurn();
         CellPosition kingPos = model.getKingPosition(alliance);
@@ -73,25 +81,7 @@ public class Knight implements IChessPiece{
         }
     }
 
-    @Override
-    public String getImageFilePath() {
-        return imageIcon.toString();
-    }
 
-    @Override
-    public ChessAlliance getAlliance() {
-        return pieceColor;
-    }
-
-    @Override
-    public CellPosition getPos() {
-        return pos;
-    }
-
-    @Override
-    public List<Move> getCandidateMoves() {
-        return candidateMoves;
-    }
 
     @Override
     public void updateCandidateMoves() {
@@ -177,12 +167,6 @@ public class Knight implements IChessPiece{
         }
     }
 
-
-    @Override
-    public void redoMove(Move move) {
-
-    }
-
     @Override
     public boolean isAttacking() {
         ChessAlliance oppAlliance;
@@ -199,5 +183,30 @@ public class Knight implements IChessPiece{
             } else this.isAttacking = false;
         }
         return this.isAttacking;
+    }
+
+    @Override
+    public String getImageFilePath() {
+        return imageIcon.toString();
+    }
+
+    @Override
+    public ChessAlliance getAlliance() {
+        return pieceColor;
+    }
+
+    @Override
+    public CellPosition getPos() {
+        return pos;
+    }
+
+    @Override
+    public List<Move> getCandidateMoves() {
+        return candidateMoves;
+    }
+
+    @Override
+    public void redoMove(Move move) {
+
     }
 }

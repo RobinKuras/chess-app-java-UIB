@@ -12,13 +12,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bishop implements IChessPiece{
-    private ChessModel model;
-    private ChessBoard board;
+    private final ChessModel model;
+    private final ChessBoard board;
     private CellPosition pos;
     private final ChessAlliance pieceColor;
-    private ImageIcon imageIcon;
+    private final ImageIcon imageIcon;
     private boolean isAttacking;
-    private List<Move> candidateMoves = new ArrayList<>();
+    private final List<Move> candidateMoves = new ArrayList<>();
+
+    /**
+     * The constructor of the chess piece representing bishops.
+     * @param model the model the piece is a part of, to gain access to all other pieces positions.
+     * @param position the current position on the chess board.
+     * @param color the chess alliance of the piece. WHITE/BLACK
+     */
     public Bishop(ChessModel model, CellPosition position, ChessAlliance color){
         this.pos = position;
         this.pieceColor = color;
@@ -31,6 +38,7 @@ public class Bishop implements IChessPiece{
         } else this.imageIcon = new ImageIcon("src/main/resources/Chess_Black-Bishop.png");
     }
 
+    @Override
     public void addCandidateMove(Move move){
         if(!resultsInCheck(move)){
             candidateMoves.add(move);
@@ -39,6 +47,7 @@ public class Bishop implements IChessPiece{
         }
     }
 
+    @Override
     public boolean resultsInCheck(Move move){
         ChessAlliance alliance = model.getCurrentPlayersTurn();
         CellPosition kingPos = model.getKingPosition(alliance);
@@ -71,25 +80,7 @@ public class Bishop implements IChessPiece{
         }
     }
 
-    @Override
-    public String getImageFilePath() {
-        return imageIcon.toString();
-    }
 
-    @Override
-    public ChessAlliance getAlliance() {
-        return pieceColor;
-    }
-
-    @Override
-    public CellPosition getPos() {
-        return pos;
-    }
-
-    @Override
-    public List<Move> getCandidateMoves() {
-        return candidateMoves;
-    }
 
     @Override
     public void updateCandidateMoves() {
@@ -170,7 +161,25 @@ public class Bishop implements IChessPiece{
     }
 
     @Override
-    public void redoMove(Move move) {
+    public void redoMove(Move move) {}
 
+    @Override
+    public String getImageFilePath() {
+        return imageIcon.toString();
+    }
+
+    @Override
+    public ChessAlliance getAlliance() {
+        return pieceColor;
+    }
+
+    @Override
+    public CellPosition getPos() {
+        return pos;
+    }
+
+    @Override
+    public List<Move> getCandidateMoves() {
+        return candidateMoves;
     }
 }
