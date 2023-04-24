@@ -31,10 +31,9 @@ public class ChessController extends MouseAdapter {
 
         @Override
         public void mousePressed(MouseEvent event){
-            if(model.isCheck()){
-                System.out.println("SJAKK");
+            if(model.isCheckMate()){
+                System.out.println("SJAKK MATT SJAKK MATT MATT SJAKK MATTMATTMATT");
             }
-
             //If no piece is selected, get possible moves from the piece at clicked tile, prepare for it to be moved
             if(selectedPiece == null){
                 Point2D mouseCoordinate = event.getPoint();
@@ -69,8 +68,6 @@ public class ChessController extends MouseAdapter {
                         model.getBoard().get(newPos).setPiece(selectedPiece);
                         model.getBoard().get(oldPos).setPiece(null);
                         selectedPiece.updateCandidateMoves();
-                        System.out.println(selectedPiece.getCandidateMoves());
-                        System.out.println(selectedPiece.isAttacking());
                         selectedPiece = null;
                         model.newTurn();
 

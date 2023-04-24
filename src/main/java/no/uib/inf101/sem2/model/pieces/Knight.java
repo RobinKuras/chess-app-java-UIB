@@ -43,6 +43,7 @@ public class Knight implements IChessPiece{
 
     public boolean resultsInCheck(Move move){
         ChessAlliance alliance = model.getCurrentPlayersTurn();
+        CellPosition kingPos = model.getKingPosition(alliance);
         ChessAlliance oppAlliance;
 
         if (alliance == ChessAlliance.WHITE) {
@@ -56,7 +57,7 @@ public class Knight implements IChessPiece{
             if (tile.getPiece() != null) {
                 if (tile.getPiece().getAlliance() == oppAlliance) {
                     for(Move candMove : tile.getPiece().getCandidateMoves()){
-                        if(candMove.getDestination().equals(move.getDestination())) {
+                        if(candMove.getDestination().equals(kingPos)) {
                             return true;
                         }
                     }

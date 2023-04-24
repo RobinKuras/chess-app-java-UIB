@@ -159,6 +159,17 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
         } return false;
     }
 
+    public boolean isCheckMate(){
+        for(GridCell<Tile> tile : getTilesOnBoard()){
+            if(tile.value().getPiece() != null && tile.value().getPiece().getAlliance() == currentPlayersTurn){
+                tile.value().getPiece().updateCandidateMoves();
+                if(tile.value().getPiece().getCandidateMoves().size() != 0){
+                    return false;
+                }
+            }
+        } return true;
+    }
+
     /**
      *
      * @return the board object of the model
