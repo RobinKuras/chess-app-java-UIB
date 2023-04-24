@@ -27,8 +27,8 @@ public class Queen implements IChessPiece{
         this.isAttacking = false;
 
         if(this.pieceColor == ChessAlliance.WHITE){
-            this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_White-Queen.png");
-        } else this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_Black-Queen.png");
+            this.imageIcon = new ImageIcon("src/main/resources/Chess_White-Queen.png");
+        } else this.imageIcon = new ImageIcon("src/main/resources/Chess_Black-Queen.png");
     }
 
     public void addCandidateMove(Move move){

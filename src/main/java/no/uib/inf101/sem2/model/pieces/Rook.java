@@ -28,8 +28,8 @@ public class Rook implements IChessPiece{
         this.board = model.getBoard();
 
         if(this.pieceColor == ChessAlliance.WHITE){
-            this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_White-Rook.png");
-        } else this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_Black-Rook.png");
+            this.imageIcon = new ImageIcon("src/main/resources/Chess_White-Rook.png");
+        } else this.imageIcon = new ImageIcon("src/main/resources/Chess_Black-Rook.png");
     }
 
     public void addCandidateMove(Move move){

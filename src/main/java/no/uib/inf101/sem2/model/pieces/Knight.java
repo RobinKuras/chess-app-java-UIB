@@ -27,9 +27,9 @@ public class Knight implements IChessPiece{
         this.isAttacking = false;
 
         if(this.pieceColor == ChessAlliance.WHITE){
-            this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_White-Knight.png");
+            this.imageIcon = new ImageIcon("src/main/resources/Chess_White-Knight.png");
         } else {
-            this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_Black-Knight.png");
+            this.imageIcon = new ImageIcon("src/main/resources/Chess_Black-Knight.png");
         }
     }
 

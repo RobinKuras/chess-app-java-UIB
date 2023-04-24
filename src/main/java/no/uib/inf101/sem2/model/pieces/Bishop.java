@@ -27,8 +27,8 @@ public class Bishop implements IChessPiece{
 
 
         if(this.pieceColor == ChessAlliance.WHITE){
-            this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_White-Bishop.png");
-        } else this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_Black-Bishop.png");
+            this.imageIcon = new ImageIcon("src/main/resources/Chess_White-Bishop.png");
+        } else this.imageIcon = new ImageIcon("src/main/resources/Chess_Black-Bishop.png");
     }
 
     public void addCandidateMove(Move move){
