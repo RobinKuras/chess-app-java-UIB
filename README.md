@@ -22,3 +22,6 @@ Kongen kan ikke sette seg selv i sjakk dersom spillet ikke allerede er i sjakk. 
 For andre brikker gjelder i tillegg at dersom de blokkerer kongen fra å stå i sjakk, er det alikvell lovlig å flytte den ut av veien, og dermed sette seg selv i sjakk.
 
 *For å summere*: Brikkene har problemer med å vite om de *står* i blokkering for sjakk, eller om det å bevege seg til en gitt posisjon ville blokkert sjakk.
+
+*LINK TIL VIDEO*:
+https://www.youtube.com/watch?v=0T93F8NzcCY
