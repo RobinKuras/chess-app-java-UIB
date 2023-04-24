@@ -24,7 +24,7 @@ public class Queen implements IChessPiece{
         this.pieceColor = color;
         this.model = model;
         this.board = model.getBoard();
-        this.isAttacking = true;
+        this.isAttacking = false;
 
         if(this.pieceColor == ChessAlliance.WHITE){
             this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_White-Queen.png");
@@ -201,7 +201,21 @@ public class Queen implements IChessPiece{
 
     @Override
     public boolean isAttacking() {
-        return isAttacking;
+        ChessAlliance oppAlliance;
+
+        if (pieceColor == ChessAlliance.WHITE) {
+            oppAlliance = ChessAlliance.BLACK;
+        } else {
+            oppAlliance = ChessAlliance.WHITE;
+        }
+
+        for(Move move : getCandidateMoves()){
+            if(move.getDestination().equals(model.getKingPosition(oppAlliance))){
+                this.isAttacking = true;
+                return isAttacking;
+            } else this.isAttacking = false;
+        }
+        return this.isAttacking;
     }
 
     @Override

@@ -69,6 +69,8 @@ public class ChessController extends MouseAdapter {
                         model.getBoard().get(newPos).setPiece(selectedPiece);
                         model.getBoard().get(oldPos).setPiece(null);
                         selectedPiece.updateCandidateMoves();
+                        System.out.println(selectedPiece.getCandidateMoves());
+                        System.out.println(selectedPiece.isAttacking());
                         selectedPiece = null;
                         model.newTurn();
 

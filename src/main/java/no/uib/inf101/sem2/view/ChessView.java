@@ -56,12 +56,7 @@ public class ChessView extends JPanel {
             } else {
                 canvas.setColor(Color.WHITE);
             }
-/* Fargelegg candidate moves
-            if(selectedTile != null){
-                Tile selectedTileValue = model.getBoard().get(selectedTile);
-            }
 
- */
             canvas.fill(rectangle);
 
             if(tile.value().getPiece() != null){

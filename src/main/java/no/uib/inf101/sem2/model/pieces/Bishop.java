@@ -153,7 +153,20 @@ public class Bishop implements IChessPiece{
 
     @Override
     public boolean isAttacking() {
-        return false;
+        ChessAlliance oppAlliance;
+
+        if (pieceColor == ChessAlliance.WHITE) {
+            oppAlliance = ChessAlliance.BLACK;
+        } else {
+            oppAlliance = ChessAlliance.WHITE;
+        }
+
+        for(Move move : getCandidateMoves()){
+            if(move.getDestination().equals(model.getKingPosition(oppAlliance))){
+                this.isAttacking = true;
+            } else this.isAttacking = false;
+        }
+        return this.isAttacking;
     }
 
     @Override

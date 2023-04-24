@@ -18,12 +18,14 @@ public class Pawn implements IChessPiece{
     private final ChessAlliance pieceColor;
     private ImageIcon imageIcon;
     private List<Move> candidateMoves = new ArrayList<>();
+    private boolean isAttacking;
 
     public Pawn(ChessModel model, CellPosition position,ChessAlliance color){
         this.pos = position;
         this.pieceColor = color;
         this.model = model;
         this.board = model.getBoard();
+        this.isAttacking = false;
 
         if(this.pieceColor == ChessAlliance.WHITE){
             this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_White-Pawn.png");
@@ -83,13 +85,26 @@ public class Pawn implements IChessPiece{
     }
 
     @Override
-    public boolean isAttacking() {
-        return false;
+    public void redoMove(Move move) {
+
     }
 
     @Override
-    public void redoMove(Move move) {
+    public boolean isAttacking() {
+        ChessAlliance oppAlliance;
 
+        if (pieceColor == ChessAlliance.WHITE) {
+            oppAlliance = ChessAlliance.BLACK;
+        } else {
+            oppAlliance = ChessAlliance.WHITE;
+        }
+
+        for(Move move : getCandidateMoves()){
+            if(move.getDestination().equals(model.getKingPosition(oppAlliance))){
+                this.isAttacking = true;
+            } else this.isAttacking = false;
+        }
+        return this.isAttacking;
     }
 
     private void updateBlackMoves() {

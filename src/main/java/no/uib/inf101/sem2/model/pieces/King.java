@@ -17,12 +17,14 @@ public class King implements IChessPiece{
     private CellPosition pos;
     private final ChessAlliance pieceColor;
     private ImageIcon imageIcon;
+    private boolean isAttacking;
     private List<Move> candidateMoves = new ArrayList<>();
     public King(ChessModel model, CellPosition position, ChessAlliance color){
         this.pos = position;
         this.pieceColor = color;
         this.model = model;
         this.board = model.getBoard();
+        this.isAttacking = false;
 
         if(this.pieceColor == ChessAlliance.WHITE){
             this.imageIcon = new ImageIcon("src/main/java/no/uib/inf101/sem2/images/Chess_White-King.png");
@@ -73,6 +75,24 @@ public class King implements IChessPiece{
     }
 
     @Override
+    public boolean isAttacking() {
+        ChessAlliance oppAlliance;
+
+        if (pieceColor == ChessAlliance.WHITE) {
+            oppAlliance = ChessAlliance.BLACK;
+        } else {
+            oppAlliance = ChessAlliance.WHITE;
+        }
+
+        for(Move move : getCandidateMoves()){
+            if(move.getDestination().equals(model.getKingPosition(oppAlliance))){
+                this.isAttacking = true;
+            } else this.isAttacking = false;
+        }
+        return this.isAttacking;
+    }
+
+    @Override
     public String getImageFilePath() {
         return imageIcon.toString();
     }
@@ -116,10 +136,5 @@ public class King implements IChessPiece{
                 }
             }
         }
-    }
-
-    @Override
-    public boolean isAttacking() {
-        return false;
     }
 }

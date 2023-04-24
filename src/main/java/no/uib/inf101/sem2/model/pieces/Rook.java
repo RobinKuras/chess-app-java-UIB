@@ -18,11 +18,13 @@ public class Rook implements IChessPiece{
     private final ChessAlliance pieceColor;
     private final ImageIcon imageIcon;
     private List<Move> candidateMoves = new ArrayList<>();
+    private boolean isAttacking;
 
     public Rook(ChessModel model, CellPosition position, ChessAlliance color){
         this.pos = position;
         this.pieceColor = color;
         this.model = model;
+        this.isAttacking = false;
         this.board = model.getBoard();
 
         if(this.pieceColor == ChessAlliance.WHITE){
@@ -136,13 +138,27 @@ public class Rook implements IChessPiece{
         }
     }
 
-    @Override
-    public boolean isAttacking() {
-        return false;
-    }
 
     @Override
     public void redoMove(Move move) {
 
+    }
+
+    @Override
+    public boolean isAttacking() {
+        ChessAlliance oppAlliance;
+
+        if (pieceColor == ChessAlliance.WHITE) {
+            oppAlliance = ChessAlliance.BLACK;
+        } else {
+            oppAlliance = ChessAlliance.WHITE;
+        }
+
+        for(Move move : getCandidateMoves()){
+            if(move.getDestination().equals(model.getKingPosition(oppAlliance))){
+                this.isAttacking = true;
+            } else this.isAttacking = false;
+        }
+        return this.isAttacking;
     }
 }
