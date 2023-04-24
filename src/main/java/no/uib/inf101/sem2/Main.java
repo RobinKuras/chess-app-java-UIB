@@ -13,7 +13,6 @@ public class Main {
     ChessModel model = new ChessModel(board);
     ChessView view = new ChessView(model);
     new ChessController(model,view);
-    System.out.println(board.prettyString());
 
     JFrame frame = new JFrame();
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

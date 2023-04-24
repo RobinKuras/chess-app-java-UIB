@@ -82,16 +82,25 @@ public class ChessView extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        drawGame(g2);
-
-        // Draw the text
-        String turn = model.getCurrentPlayersTurn().toString()+" turn! -- In check:"+model.isCheck();
+        drawGame(g2); // continue drawing the game normally
+        String turn = model.getCurrentPlayersTurn().toString() + " turn! -- In check:" + model.isCheck();
         g2.setColor(Color.WHITE);
         g2.setFont(new Font("SansSerif", Font.PLAIN, 20));
         FontMetrics fm = g2.getFontMetrics();
         int x = getWidth() / 2 - fm.stringWidth(turn) / 2;
         int y = 25 + fm.getHeight() / 2;
-        g2.drawString(turn, x, y-10);
+        g2.drawString(turn, x, y - 10);
+
+        if (model.isCheckMate()) {
+            String gameOverText = "CHECKMATE";
+            g2.setColor(Color.RED);
+            g2.setFont(new Font("SansSerif", Font.BOLD, 80));
+            FontMetrics gameOverfm = g2.getFontMetrics();
+            Rectangle2D gameOverRect = gameOverfm.getStringBounds(gameOverText, g2);
+            double gameOverX = (getWidth() - gameOverRect.getWidth()) / 2;
+            double gameOverY = (getHeight() - gameOverRect.getHeight()) / 2 + gameOverfm.getAscent();
+            g2.drawString(gameOverText, (int) gameOverX, (int) gameOverY);
+        }
     }
 
     public CellPositionToPixelConverter getCellPositionToPixelConverter(){

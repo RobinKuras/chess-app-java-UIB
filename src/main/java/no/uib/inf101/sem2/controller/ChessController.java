@@ -12,7 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
 public class ChessController extends MouseAdapter {
-        private final ChessModel model;
+        private final ControlableChessModel model;
         private final ChessView view;
         private IChessPiece selectedPiece;
 
@@ -31,55 +31,55 @@ public class ChessController extends MouseAdapter {
 
         @Override
         public void mousePressed(MouseEvent event){
-            if(model.isCheckMate()){
-                System.out.println("SJAKK MATT SJAKK MATT MATT SJAKK MATTMATTMATT");
-            }
-            //If no piece is selected, get possible moves from the piece at clicked tile, prepare for it to be moved
-            if(selectedPiece == null){
-                Point2D mouseCoordinate = event.getPoint();
-                CellPositionToPixelConverter converter = this.view.getCellPositionToPixelConverter();
-                CellPosition pos = converter.getCellPositionOfPoint(mouseCoordinate);
-
-                try {
-                    IChessPiece piece = model.getBoard().getPieceAt(pos);
-                    if(piece != null && piece.getAlliance() == model.getCurrentPlayersTurn()){
-                        selectedPiece = piece;
-                        piece.updateCandidateMoves();
-                        System.out.println(piece.getCandidateMoves());
-                    } else System.out.println("No Piece here!");
-                } catch (NullPointerException e) {
-                    System.out.println("You clicked out of bounds");
-                }
-
-                //If you have a selected piece, try to move it to the tile you clicked
-            } else {
-                try{
+            if(!model.isCheckMate()){
+                //If no piece is selected, get possible moves from the piece at clicked tile, prepare for it to be moved
+                if(selectedPiece == null){
                     Point2D mouseCoordinate = event.getPoint();
-                    CellPositionToPixelConverter converter = this.view.getCellPositionToPixelConverter();
-                    CellPosition newPos = converter.getCellPositionOfPoint(mouseCoordinate);
-                    CellPosition oldPos = selectedPiece.getPos();
+                    CellPositionToPixelConverter converter = view.getCellPositionToPixelConverter();
+                    CellPosition pos = converter.getCellPositionOfPoint(mouseCoordinate);
 
-                    int deltaRow = newPos.row() - oldPos.row();
-                    int deltaCol = newPos.col() - oldPos.col();
-                    Move move = new Move(selectedPiece,new CellPosition(deltaRow, deltaCol));
+                    try {
+                        IChessPiece piece = model.getBoard().getPieceAt(pos);
+                        if(piece != null && piece.getAlliance() == model.getCurrentPlayersTurn()){
+                            selectedPiece = piece;
+                            piece.updateCandidateMoves();
+                            System.out.println(piece.getCandidateMoves());
+                        } else System.out.println("No Piece here!");
+                    } catch (NullPointerException e) {
+                        System.out.println("You clicked out of bounds");
+                    }
 
-                    if(model.isLegalMove(move)){
-                        selectedPiece.movePiece(move);
-                        model.getBoard().get(newPos).setPiece(selectedPiece);
-                        model.getBoard().get(oldPos).setPiece(null);
-                        selectedPiece.updateCandidateMoves();
-                        selectedPiece = null;
-                        model.newTurn();
+                    //If you have a selected piece, try to move it to the tile you clicked
+                } else {
+                    try{
+                        Point2D mouseCoordinate = event.getPoint();
+                        CellPositionToPixelConverter converter = view.getCellPositionToPixelConverter();
+                        CellPosition newPos = converter.getCellPositionOfPoint(mouseCoordinate);
+                        CellPosition oldPos = selectedPiece.getPos();
+
+                        int deltaRow = newPos.row() - oldPos.row();
+                        int deltaCol = newPos.col() - oldPos.col();
+                        Move move = new Move(selectedPiece,new CellPosition(deltaRow, deltaCol));
+
+                        if(model.isLegalMove(move)){
+                            selectedPiece.movePiece(move);
+                            model.getBoard().get(newPos).setPiece(selectedPiece);
+                            model.getBoard().get(oldPos).setPiece(null);
+                            selectedPiece.updateCandidateMoves();
+                            selectedPiece = null;
+                            model.newTurn();
 
 
-                    } else{
-                        System.out.println("Illegal move");
+                        } else{
+                            System.out.println("Illegal move ... Resetting selected piece");
+                            selectedPiece = null;
+                        }
+                    } catch (NullPointerException e){
+                        System.out.println("You clicked out of bounds ... Resetting selected piece");
                         selectedPiece = null;
                     }
-                } catch (NullPointerException e){
-                    System.out.println("You clicked out of bounds ... Resetting selected piece");
-                    selectedPiece = null;
                 }
             }
-        }
+            }
+
 }

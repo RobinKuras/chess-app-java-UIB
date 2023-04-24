@@ -8,4 +8,5 @@ public interface ViewableChessModel {
 
     GridDimension getDimensions();
     Iterable<GridCell<Tile>> getTilesOnBoard();
+
 }
