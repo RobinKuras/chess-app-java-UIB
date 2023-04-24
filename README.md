@@ -6,6 +6,7 @@ Hvordan det spilles:
 
 1. spiller trykker med en musetast på en av brikkene sine. Dermed blir brikken valgt. Deretter kan du flytte brikken i henhold til sine regler.
    https://www.chesshouse.com/pages/chess-rules. 
+Når du trykker på en brikke, vil du info om lovlige trekk i terminalen dersom du kjører programmet fra en IDE. Da gir den også tilbakemelding på ulovlige trekk/om du trykker utenfor rutenettet.
 (Det er dessverre ikke funksjonalitet for spesielle trekk som rokkade eller promotering av bønner 
 2. Spillet endrer tur til andre siden av brettet. Og prosedyren gjentas.
 3. Dersom en spiller flytter sin brikke og "tar over" feltet til en brikke av motsatt farge, blir den fangede brikken borte fra spillet.
