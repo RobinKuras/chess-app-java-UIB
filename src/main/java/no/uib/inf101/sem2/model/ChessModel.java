@@ -20,26 +20,6 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
     public void initiateBoard(){
         setupBlackPieces();
         setupWhitePieces();
-        //setupTestPieces();
-    }
-
-    private void setupTestPieces() {
-        // TEST REMOVE AFTER USE ****************************************************
-        King testKing = new King(this,new CellPosition(3, 0), ChessAlliance.BLACK);
-        board.get(testKing.getPos()).setPiece(testKing);
-
-        //TEST REMOVE AFTER USE ****************************************************
-        King testKing2 = new King(this,new CellPosition(4,0),ChessAlliance.WHITE);
-        board.get(testKing2.getPos()).setPiece(testKing2);
-
-        Pawn testWhitePawn = new Pawn(this,new CellPosition(2,1),ChessAlliance.WHITE);
-        board.get(testWhitePawn.getPos()).setPiece(testWhitePawn);
-
-        Pawn testBlackPawn = new Pawn(this,new CellPosition(5,6),ChessAlliance.BLACK);
-        board.get(testBlackPawn.getPos()).setPiece(testBlackPawn);
-
-        Rook testRook = new Rook(this,new CellPosition(4,4),ChessAlliance.WHITE);
-        board.get(testRook.getPos()).setPiece(testRook);
     }
 
     public void setupBlackPieces(){
@@ -110,10 +90,12 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
         board.get(wKing.getPos()).setPiece(wKing);
     }
 
-    public boolean isLegalMove(IChessPiece piece,Move move){
-        CellPosition tempPos = new CellPosition(piece.getPos().row()+move.deltaPos().row(),piece.getPos().col()+ move.deltaPos().col());
-        return (board.positionIsOnGrid(tempPos)) && (piece.getCandidateMoves().contains(move));
+    @Override
+    public boolean isLegalMove(Move move){
+        CellPosition tempPos = new CellPosition(move.getDestination().row(),move.getDestination().col());
+        return (board.positionIsOnGrid(tempPos)) && (move.pieceToBeMoved().getCandidateMoves().contains(move));
     }
+    @Override
     public void newTurn(){
         if(currentPlayersTurn == ChessAlliance.WHITE){
             currentPlayersTurn = ChessAlliance.BLACK;
@@ -162,16 +144,25 @@ public class ChessModel implements ViewableChessModel, ControlableChessModel {
     }
 
 
-
+    /**
+     *
+     * @param attacker the attacking piece
+     * @param target the piece "attacker" wants to attack
+     * @return if the target position is the destination of the one of the candidateMoves of the attacker, return true, else return false
+     */
     public boolean canAttack(CellPosition attacker, CellPosition target){
         Move tryMove = new Move(getBoard().get(attacker).getPiece(),new CellPosition(target.row()-attacker.row(),target.col()-attacker.col()));
-        for(Move move : getBoard().get(attacker).getPiece().getCandidateMoves()){
+        for(Move move : board.get(attacker).getPiece().getCandidateMoves()){
             if (move.getDestination().equals(tryMove.getDestination())){
                 return true;
             }
         } return false;
     }
 
+    /**
+     *
+     * @return the board object of the model
+     */
     public ChessBoard getBoard(){
         return this.board;
     }
